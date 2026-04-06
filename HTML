@@ -28,4 +28,15 @@
   </div>
 
   </div>
+    <script>
+function openFlipbook(pdf) {
+  document.getElementById("flipbookFrame").src = pdf;
+  document.getElementById("flipbookModal").style.display = "block";
+}
+
+function closeFlipbook() {
+  document.getElementById("flipbookModal").style.display = "none";
+  document.getElementById("flipbookFrame").src = "";
+}
+</script>
 </section>
