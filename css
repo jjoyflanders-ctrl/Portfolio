@@ -1,0 +1,58 @@
+.portfolio-section {
+  padding: 80px 40px;
+}
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.portfolio-card {
+  cursor: pointer;
+  transition: all 0.35s ease;
+}
+
+.portfolio-card:hover {
+  transform: translateY(-8px);
+}
+
+.portfolio-card img {
+  width: 100%;
+  border-radius: 14px;
+}
+.flipbook-modal {
+  display: none;
+  position: fixed;
+  top: 120px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 120px);
+  background: rgba(0,0,0,0.85);
+  z-index: 9999;
+}
+
+.flipbook-content {
+  width: 85%;
+  height: 85%;
+  margin: auto;
+  position: relative;
+}
+
+.flipbook-content iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: black;
+}
+
+.close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+}
