@@ -1,0 +1,31 @@
+<section class="portfolio-section">
+  <div class="portfolio-grid">
+
+    <!-- Full Portfolio -->
+    <div class="portfolio-card" onclick="openFlipbook('Full Portfolio.pdf')">
+      <img src="Full Portfolio Cover card.svg" alt="Full Portfolio">
+    </div>
+
+    <!-- Highlight Industries -->
+    <div class="portfolio-card" onclick="openFlipbook('Highlight Industries Portfolio Flipbook.pdf')">
+      <img src="Highlight Industries Portfolio.svg" alt="Highlight Industries">
+    </div>
+
+    <!-- With Purpose Counseling -->
+    <div class="portfolio-card" onclick="openFlipbook('With Purpose Counseling LLC Portfolio.pdf')">
+      <img src="With Purpose Counseling LLC Portfolio.svg" alt="With Purpose Counseling">
+    </div>
+
+    <!-- Kenowa Hills -->
+    <div class="portfolio-card" onclick="openFlipbook('Kenowa Hills PBIS Portfolio-2.pdf')">
+      <img src="Kenowa Hills PBIS Portfolio.svg" alt="Kenowa Hills">
+    </div>
+
+    <div id="flipbookModal" class="flipbook-modal">
+  <div class="flipbook-content">
+    <span class="close" onclick="closeFlipbook()">×</span>
+    <iframe id="flipbookFrame"></iframe>
+  </div>
+
+  </div>
+</section>
