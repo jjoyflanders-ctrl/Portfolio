@@ -1,3 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J² Squared Designs</title>
+
+<style>
+
+/* Portfolio Section */
+
+.portfolio-section {
+  padding: 80px 40px;
+}
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.portfolio-card {
+  cursor: pointer;
+  transition: all 0.35s ease;
+}
+
+.portfolio-card:hover {
+  transform: translateY(-8px);
+}
+
+.portfolio-card img {
+  width: 100%;
+  border-radius: 14px;
+}
+
+
+/* Flipbook Modal */
+
+.flipbook-modal {
+  display: none;
+  position: fixed;
+  top: 120px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 120px);
+  background: rgba(0,0,0,0.85);
+  z-index: 9999;
+}
+
+.flipbook-content {
+  width: 85%;
+  height: 85%;
+  margin: auto;
+  position: relative;
+}
+
+.flipbook-content iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: black;
+}
+
+.close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+
+/* Responsive */
+
+@media (max-width: 1200px) {
+  .portfolio-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .portfolio-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+</style>
+
+</head>
+
+<body>
+
+
 <section class="portfolio-section">
   <div class="portfolio-grid">
 
@@ -21,14 +117,22 @@
       <img src="Kenowa Hills PBIS Portfolio.svg" alt="Kenowa Hills">
     </div>
 
-    <div id="flipbookModal" class="flipbook-modal">
+  </div>
+</section>
+
+
+<!-- Flipbook Modal -->
+
+<div id="flipbookModal" class="flipbook-modal">
   <div class="flipbook-content">
     <span class="close" onclick="closeFlipbook()">×</span>
     <iframe id="flipbookFrame"></iframe>
   </div>
+</div>
 
-  </div>
-    <script>
+
+<script>
+
 function openFlipbook(pdf) {
   document.getElementById("flipbookFrame").src = pdf;
   document.getElementById("flipbookModal").style.display = "block";
@@ -38,5 +142,9 @@ function closeFlipbook() {
   document.getElementById("flipbookModal").style.display = "none";
   document.getElementById("flipbookFrame").src = "";
 }
+
 </script>
-</section>
+
+
+</body>
+</html>
