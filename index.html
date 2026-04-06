@@ -1,1 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>J² Squared Designs</title>
+
+<style>
+
+body {
+margin:0;
+font-family: Arial, Helvetica, sans-serif;
+background: #e9eceb;
+}
+
+/* NAV */
+
+nav{
+position:fixed;
+top:20px;
+left:50%;
+transform:translateX(-50%);
+width:90%;
+max-width:1400px;
+background:#5f6361;
+border-radius:20px;
+padding:18px 30px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+z-index:999;
+box-shadow:0 10px 30px rgba(0,0,0,0.15);
+}
+
+nav .logo{
+color:#2bb673;
+font-weight:bold;
+letter-spacing:2px;
+}
+
+nav ul{
+display:flex;
+gap:30px;
+list-style:none;
+margin:0;
+padding:0;
+}
+
+nav ul li{
+color:white;
+cursor:pointer;
+}
+
+/* HERO */
+
+.hero{
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:120px 80px;
+}
+
+.hero-card{
+background:white;
+padding:60px;
+border-radius:30px;
+max-width:700px;
+box-shadow:0 30px 60px rgba(0,0,0,0.08);
+}
+
+.hero-card h1{
+font-size:60px;
+line-height:1.1;
+margin:20px 0;
+}
+
+.logo-spin{
+width:420px;
+position:sticky;
+top:200px;
+}
+
+/* ABOUT */
+
+.about{
+padding:100px 80px;
+}
+
+.about-card{
+background:white;
+padding:60px;
+border-radius:30px;
+max-width:800px;
+margin:auto;
+}
+
+/* PORTFOLIO */
+
+.portfolio{
+padding:100px 80px;
+}
+
+.portfolio-header{
+background:white;
+padding:40px;
+border-radius:30px;
+margin-bottom:40px;
+}
+
+.portfolio-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:30px;
+}
+
+.portfolio-card img{
+width:100%;
+border-radius:20px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.portfolio-card img:hover{
+transform:translateY(-10px);
+}
+
+/* MODAL */
+
+.flipbook-modal{
+display:none;
+position:fixed;
+top:100px;
+left:0;
+width:100%;
+height:calc(100% - 100px);
+background:rgba(0,0,0,0.9);
+z-index:9999;
+}
+
+.flipbook-content{
+width:90%;
+height:90%;
+margin:auto;
+position:relative;
+}
+
+.flipbook-content iframe{
+width:100%;
+height:100%;
+border:none;
+}
+
+.close{
+position:absolute;
+top:-40px;
+right:0;
+color:white;
+font-size:30px;
+cursor:pointer;
+}
+
+/* CONTACT */
+
+.contact{
+padding:120px 80px;
+background:url("brick.jpg");
+background-size:cover;
+color:white;
+text-align:center;
+}
+
+@media(max-width:1200px){
+.portfolio-grid{
+grid-template-columns:repeat(2,1fr);
+}
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav>
+<div class="logo">J² SQUARED DESIGNS</div>
+<ul>
+<li>Home</li>
+<li>About</li>
+<li>Portfolio</li>
+<li>Contact</li>
+</ul>
+</nav>
+
+<section class="hero">
+
+<div class="hero-card">
+<h1>Creative work built to feel polished, useful, and memorable.</h1>
+<p>I build clean, high-impact creative that looks good and actually works.</p>
+</div>
+
+<img class="logo-spin" src="j2-logo.png">
+
+</section>
+
+
+<section class="about">
+
+<div class="about-card">
+<h2>Design that feels intentional.</h2>
+<p>I focus on making information easier to understand and better to experience.</p>
+</div>
+
+</section>
+
+
+<section class="portfolio">
+
+<div class="portfolio-header">
+<h2>Portfolio</h2>
+<p>Click a card to open project flipbook</p>
+</div>
+
+<div class="portfolio-grid">
+
+<div class="portfolio-card" onclick="openFlipbook('Full Portfolio.pdf')">
+<img src="Full Portfolio Cover card.svg">
+</div>
+
+<div class="portfolio-card" onclick="openFlipbook('Highlight Industries Portfolio.pdf')">
+<img src="Highlight Industries Portfolio.svg">
+</div>
+
+<div class="portfolio-card" onclick="openFlipbook('With Purpose Counseling LLC Portfolio.pdf')">
+<img src="With Purpose Counseling LLC Portfolio.svg">
+</div>
+
+<div class="portfolio-card" onclick="openFlipbook('Kenowa Hills PBIS Portfolio-2.pdf')">
+<img src="Kenowa Hills PBIS Portfolio.svg">
+</div>
+
+</div>
+
+</section>
+
+
+<section class="contact">
+<h2>Contact</h2>
+<p>Jessica Joy Flanders</p>
+<p>Design + Marketing</p>
+</section>
+
+
+<div id="flipbookModal" class="flipbook-modal">
+<div class="flipbook-content">
+<span class="close" onclick="closeFlipbook()">×</span>
+<iframe id="flipbookFrame"></iframe>
+</div>
+</div>
+
+
+<script>
+
+function openFlipbook(pdf){
+document.getElementById("flipbookFrame").src = pdf;
+document.getElementById("flipbookModal").style.display = "block";
+}
+
+function closeFlipbook(){
+document.getElementById("flipbookModal").style.display = "none";
+document.getElementById("flipbookFrame").src = "";
+}
+
+</script>
+
+</body>
+</html>
