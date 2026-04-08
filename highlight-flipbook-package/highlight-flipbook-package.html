@@ -5,9 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>J² Designs | Highlight Industries Portfolio Flipbook</title>
 <style>
+
 * { box-sizing: border-box; }
-body {
+
+html, body {
+  height: 100%;
   margin: 0;
+  overflow-x: hidden;
+}
+
+body {
   background: radial-gradient(circle at top, rgba(55,55,55,.95) 0%, rgba(17,17,17,.98) 42%, rgba(5,5,5,1) 100%);
   color: white;
   font-family: Arial, Helvetica, sans-serif;
@@ -15,8 +22,9 @@ body {
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow-x: hidden;
 }
+
+/* Background texture */
 body::before {
   content: "";
   position: fixed;
@@ -27,6 +35,8 @@ body::before {
   pointer-events: none;
   z-index: 0;
 }
+
+/* Subtle glow */
 body::after {
   content: "";
   position: fixed;
@@ -35,6 +45,8 @@ body::after {
   pointer-events: none;
   z-index: 0;
 }
+
+/* Corner logo */
 .corner-logo {
   position: fixed;
   right: 28px;
@@ -45,6 +57,8 @@ body::after {
   pointer-events: none;
   z-index: 1;
 }
+
+/* Top bar */
 .topbar {
   position: sticky;
   top: 0;
@@ -58,6 +72,7 @@ body::after {
   backdrop-filter: blur(8px);
   border-bottom: 1px solid rgba(255,255,255,.10);
 }
+
 .title-wrap h1 {
   margin: 0;
   font-size: 28px;
@@ -66,17 +81,21 @@ body::after {
   color: #00bf63;
   text-shadow: 0 0 8px rgba(0,191,99,.22);
 }
+
 .title-wrap p {
   margin: 4px 0 0;
   color: rgba(255,255,255,.72);
   font-size: 14px;
 }
+
+/* Controls */
 .controls {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   align-items: center;
 }
+
 button,
 .control-link {
   background: rgba(25,25,25,.96);
@@ -86,12 +105,10 @@ button,
   padding: 10px 16px;
   font-size: 14px;
   cursor: pointer;
-  transition: transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+  transition: all .2s ease;
   text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
+
 button:hover,
 .control-link:hover {
   transform: translateY(-1px);
@@ -99,6 +116,8 @@ button:hover,
   border-color: rgba(255,255,255,.28);
   box-shadow: 0 0 16px rgba(255,255,255,.06);
 }
+
+/* Stage */
 .stage {
   position: relative;
   flex: 1;
@@ -107,11 +126,13 @@ button:hover,
   padding: 26px 16px 36px;
   z-index: 5;
 }
+
+/* Flipbook container */
 .flip-shell {
   position: relative;
   z-index: 5;
   width: min(96vw, 1400px);
-  height: min(78vh, 950px);
+  height: min(82vh, 950px);
   background: rgba(255,255,255,.04);
   border: 1px solid rgba(255,255,255,.10);
   border-radius: 26px;
@@ -122,6 +143,8 @@ button:hover,
   place-items: center;
   padding: 18px;
 }
+
+/* Glow inside */
 .flip-shell::before {
   content: "";
   position: absolute;
@@ -129,15 +152,21 @@ button:hover,
   background: radial-gradient(circle, rgba(255,255,255,.08) 0%, rgba(255,255,255,.03) 28%, rgba(255,255,255,0) 68%);
   filter: blur(22px);
   z-index: 0;
-  pointer-events: none;
 }
+
+/* Flipbook */
 #flipbook {
   width: min(92vw, 1280px);
-  height: min(72vh, 860px);
+  height: min(74vh, 860px);
   position: relative;
   z-index: 2;
 }
-.page { background: #fff; }
+
+/* Pages */
+.page {
+  background: #fff;
+}
+
 .page img {
   width: 100%;
   height: 100%;
@@ -146,6 +175,8 @@ button:hover,
   user-select: none;
   pointer-events: none;
 }
+
+/* Footer */
 .footer {
   display: flex;
   justify-content: center;
@@ -156,12 +187,29 @@ button:hover,
   font-size: 14px;
   color: rgba(255,255,255,.78);
 }
+
+/* Tablet */
+@media (max-width: 1100px) {
+  .flip-shell {
+    width: 96vw;
+    height: 78vh;
+  }
+
+  #flipbook {
+    width: 92vw;
+    height: 72vh;
+  }
+}
+
+/* Small Laptop */
 @media (max-width: 900px) {
+
   .topbar {
     padding: 14px 16px;
-    align-items: flex-start;
     flex-direction: column;
+    align-items: flex-start;
   }
+
   .flip-shell {
     width: 100vw;
     height: auto;
@@ -169,12 +217,13 @@ button:hover,
     border-radius: 0;
     border-left: 0;
     border-right: 0;
-    padding: 14px;
   }
+
   #flipbook {
     width: min(95vw, 700px);
     height: min(70vh, 760px);
   }
+
   .corner-logo {
     width: 48px;
     right: 14px;
@@ -182,6 +231,7 @@ button:hover,
     opacity: .50;
   }
 }
+
 </style>
 </head>
 <body>
