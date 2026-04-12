@@ -6,6 +6,7 @@
 <title>J² Designs | With Purpose Counseling Flipbook</title>
 <style>
 * { box-sizing: border-box; }
+
 body {
   margin: 0;
   background: radial-gradient(circle at top, rgba(55,55,55,.95) 0%, rgba(17,17,17,.98) 42%, rgba(5,5,5,1) 100%);
@@ -17,6 +18,7 @@ body {
   position: relative;
   overflow-x: hidden;
 }
+
 body::before {
   content: "";
   position: fixed;
@@ -27,6 +29,7 @@ body::before {
   pointer-events: none;
   z-index: 0;
 }
+
 body::after {
   content: "";
   position: fixed;
@@ -35,6 +38,7 @@ body::after {
   pointer-events: none;
   z-index: 0;
 }
+
 .corner-logo {
   position: fixed;
   right: 28px;
@@ -45,6 +49,7 @@ body::after {
   pointer-events: none;
   z-index: 1;
 }
+
 .topbar {
   position: sticky;
   top: 0;
@@ -58,6 +63,7 @@ body::after {
   backdrop-filter: blur(8px);
   border-bottom: 1px solid rgba(255,255,255,.10);
 }
+
 .title-wrap h1 {
   margin: 0;
   font-size: 28px;
@@ -66,17 +72,20 @@ body::after {
   color: #00bf63;
   text-shadow: 0 0 8px rgba(0,191,99,.22);
 }
+
 .title-wrap p {
   margin: 4px 0 0;
   color: rgba(255,255,255,.72);
   font-size: 14px;
 }
+
 .controls {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   align-items: center;
 }
+
 button,
 .control-link {
   background: rgba(25,25,25,.96);
@@ -92,6 +101,7 @@ button,
   align-items: center;
   justify-content: center;
 }
+
 button:hover,
 .control-link:hover {
   transform: translateY(-1px);
@@ -99,6 +109,77 @@ button:hover,
   border-color: rgba(255,255,255,.28);
   box-shadow: 0 0 16px rgba(255,255,255,.06);
 }
+
+/* Case study area */
+.case-study-wrap {
+  position: relative;
+  z-index: 5;
+  width: min(96vw, 1400px);
+  margin: 28px auto 0;
+  padding: 0 16px;
+}
+
+.case-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.case-card {
+  background: rgba(255,255,255,.045);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 22px;
+  padding: 24px 24px 22px;
+  box-shadow:
+    0 18px 40px rgba(0,0,0,.28),
+    0 0 22px rgba(255,255,255,.03);
+  backdrop-filter: blur(4px);
+}
+
+.case-card h2 {
+  margin: 0 0 14px;
+  font-size: 12px;
+  letter-spacing: .20em;
+  text-transform: uppercase;
+  color: #00bf63;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 8px;
+  text-shadow: 0 0 6px rgba(0,191,99,.25);
+}
+
+.case-card h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 32px;
+  height: 2px;
+  background: #00bf63;
+  opacity: .65;
+  box-shadow: 0 0 8px rgba(0,191,99,.35);
+}
+
+.case-card p,
+.case-card li {
+  color: rgba(255,255,255,.90);
+  line-height: 1.65;
+  font-size: 15px;
+}
+
+.case-card ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.case-card li + li {
+  margin-top: 6px;
+}
+
+.case-card-wide {
+  grid-column: span 2;
+}
+
 .stage {
   position: relative;
   flex: 1;
@@ -107,6 +188,7 @@ button:hover,
   padding: 26px 16px 36px;
   z-index: 5;
 }
+
 .flip-shell {
   position: relative;
   z-index: 5;
@@ -122,6 +204,7 @@ button:hover,
   place-items: center;
   padding: 18px;
 }
+
 .flip-shell::before {
   content: "";
   position: absolute;
@@ -131,13 +214,16 @@ button:hover,
   z-index: 0;
   pointer-events: none;
 }
+
 #flipbook {
   width: min(92vw, 1280px);
   height: min(72vh, 860px);
   position: relative;
   z-index: 2;
 }
+
 .page { background: #fff; }
+
 .page img {
   width: 100%;
   height: 100%;
@@ -146,6 +232,7 @@ button:hover,
   user-select: none;
   pointer-events: none;
 }
+
 .footer {
   display: flex;
   justify-content: center;
@@ -156,12 +243,22 @@ button:hover,
   font-size: 14px;
   color: rgba(255,255,255,.78);
 }
+
 @media (max-width: 900px) {
   .topbar {
     padding: 14px 16px;
     align-items: flex-start;
     flex-direction: column;
   }
+
+  .case-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .case-card-wide {
+    grid-column: span 1;
+  }
+
   .flip-shell {
     width: 100vw;
     height: auto;
@@ -171,10 +268,12 @@ button:hover,
     border-right: 0;
     padding: 14px;
   }
+
   #flipbook {
     width: min(95vw, 700px);
     height: min(70vh, 760px);
   }
+
   .corner-logo {
     width: 48px;
     right: 14px;
@@ -185,11 +284,13 @@ button:hover,
 </style>
 </head>
 <body>
+
 <img src="Copy of J Squared.svg" class="corner-logo" alt="">
+
 <div class="topbar">
   <div class="title-wrap">
     <h1>J² Designs | With Purpose Counseling</h1>
-    <p>Website and Logo Design. </p>
+    <p>Website Design, Logo Design.</p>
   </div>
   <div class="controls">
     <button id="prevBtn">◀ Previous</button>
@@ -198,6 +299,58 @@ button:hover,
     <a class="control-link" href="../With Purpose Counseling LLC Portfolio.pdf" download>Download PDF</a>
   </div>
 </div>
+
+<div class="case-study-wrap">
+  <div class="case-grid">
+
+    <div class="case-card">
+      <h2>Services</h2>
+      <ul>
+        <li>Website Design</li>
+        <li>Logo Design</li>
+      </ul>
+    </div>
+
+    <div class="case-card">
+      <h2>The Brand</h2>
+      <p>
+        A client-centered counseling practice focused on empathy, collaboration,
+        and personal growth, with an approach that creates a supportive space
+        for individuals, couples, and families.
+      </p>
+    </div>
+
+    <div class="case-card">
+      <h2>The Goal</h2>
+      <p>
+        Create a single website that supports both BTD Consulting LLC and With
+        Purpose Counseling LLC, while designing a logo that feels connected to
+        the existing BTD brand but can still stand on its own.
+      </p>
+    </div>
+
+    <div class="case-card">
+      <h2>The Vibes</h2>
+      <p>
+        Calm, welcoming, and professional. The design focused on clarity,
+        warmth, and an approachable feel that fits both counseling and
+        consulting services.
+      </p>
+    </div>
+
+    <div class="case-card case-card-wide">
+      <h2>Outcome</h2>
+      <ul>
+        <li>Combined two services into one website, reducing cost and maintenance</li>
+        <li>Made it easier for clients to explore both counseling and consulting services in one place</li>
+        <li>Created a logo that felt connected to the existing BTD brand while standing on its own</li>
+        <li>Provided a clean and approachable online presence aligned with the education and counseling space</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
 <div class="stage">
   <div class="flip-shell">
     <div id="flipbook">
@@ -212,7 +365,9 @@ button:hover,
     </div>
   </div>
 </div>
+
 <div class="footer">Drag the page corners or use the buttons to flip</div>
+
 <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
 <script>
 const pageFlip = new St.PageFlip(document.getElementById("flipbook"), {
@@ -233,9 +388,12 @@ const pageFlip = new St.PageFlip(document.getElementById("flipbook"), {
   drawShadow: true,
   clickEventForward: true
 });
+
 pageFlip.loadFromHTML(document.querySelectorAll(".page"));
+
 document.getElementById("prevBtn").addEventListener("click", () => pageFlip.flipPrev());
 document.getElementById("nextBtn").addEventListener("click", () => pageFlip.flipNext());
+
 document.getElementById("fsBtn").addEventListener("click", async () => {
   const el = document.documentElement;
   if (!document.fullscreenElement) {
