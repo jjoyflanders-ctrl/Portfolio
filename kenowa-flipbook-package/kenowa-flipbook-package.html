@@ -6,6 +6,7 @@
 <title>J² Designs | Kenowa Hills PBIS Flipbook</title>
 
 <style>
+
 * { box-sizing: border-box; }
 
 body {
@@ -108,11 +109,11 @@ button:hover,
   box-shadow: 0 0 16px rgba(255,255,255,.06);
 }
 
+/* Case Study */
+
 .case-study-wrap {
   width: min(96vw, 1400px);
   margin: 30px auto;
-  position: relative;
-  z-index: 2;
 }
 
 .case-grid {
@@ -161,55 +162,22 @@ button:hover,
   display: grid;
   place-items: center;
   padding: 26px;
-  position: relative;
-  z-index: 2;
 }
 
 .flip-shell {
   width: min(96vw, 1400px);
-  min-height: min(78vh, 950px);
+  height: min(78vh, 950px);
   background: rgba(255,255,255,.04);
   border: 1px solid rgba(255,255,255,.10);
   border-radius: 26px;
   display: grid;
   place-items: center;
-  padding: 18px 18px 56px;
-  position: relative;
-  overflow: hidden;
-  box-shadow:
-    0 18px 50px rgba(0,0,0,.35),
-    inset 0 0 0 1px rgba(255,255,255,.03);
-}
-
-.book-frame {
-  position: relative;
-  width: min(92vw, 1280px);
-  height: min(72vh, 860px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  perspective: 1800px;
-}
-
-.book-motion {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-origin: left center;
-  transform-style: preserve-3d;
-  transition: transform .5s ease, filter .5s ease;
-  filter: drop-shadow(0 18px 28px rgba(0,0,0,.20));
-}
-
-.book-motion.teasing {
-  animation: fauxOpen 4.2s ease-in-out infinite;
+  padding: 18px;
 }
 
 #flipbook {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  z-index: 2;
+  width: min(92vw, 1280px);
+  height: min(72vh, 860px);
 }
 
 .page img {
@@ -218,284 +186,128 @@ button:hover,
   object-fit: contain;
 }
 
-.flip-hint {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 12px;
-  letter-spacing: .15em;
-  text-transform: uppercase;
-  opacity: .6;
-  color: rgba(255,255,255,.86);
-  text-align: center;
-  white-space: nowrap;
-  animation: fadeHint 2s ease-in-out infinite;
-  transition: opacity .3s ease, transform .3s ease;
-  pointer-events: none;
-}
-
-.flip-hint.hidden {
-  opacity: 0;
-  transform: translateX(-50%) translateY(6px);
-  animation: none;
-}
-
 .footer {
   text-align: center;
   padding: 20px;
   opacity: .7;
-  position: relative;
-  z-index: 2;
 }
 
-@keyframes fadeHint {
-  0%, 100% { opacity: .38; }
-  50% { opacity: .92; }
-}
-
-@keyframes fauxOpen {
-  0%, 100% {
-    transform: perspective(1800px) rotateY(0deg) translateX(0);
-    filter: drop-shadow(0 14px 22px rgba(0,0,0,.16));
-  }
-  35% {
-    transform: perspective(1800px) rotateY(-2deg) translateX(1px);
-    filter: drop-shadow(4px 18px 26px rgba(0,0,0,.22));
-  }
-  65% {
-    transform: perspective(1800px) rotateY(-1.5deg) translateX(.5px);
-    filter: drop-shadow(2px 16px 24px rgba(0,0,0,.18));
-  }
-}
-
-@media (max-width: 900px) {
-  .case-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .case-card-wide {
-    grid-column: span 1;
-  }
-
-  .topbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .flip-shell {
-    padding-bottom: 64px;
-  }
-
-  .flip-hint {
-    font-size: 11px;
-    letter-spacing: .12em;
-    white-space: normal;
-    width: calc(100% - 32px);
-  }
-}
 </style>
 </head>
+
 <body>
 
-<img src="Copy of J Squared.svg" class="corner-logo" alt="J Squared logo">
+<img src="Copy of J Squared.svg" class="corner-logo">
 
 <div class="topbar">
-  <div class="title-wrap">
-    <h1>J² Designs | Kenowa Hills PBIS</h1>
-    <p>Community Outreach, Data-Driven Program Development, System Improvement</p>
-  </div>
+<div class="title-wrap">
+<h1>J² Designs | Kenowa Hills PBIS</h1>
+<p>Community Outreach, Data-Driven Program Development, System Improvement</p>
+</div>
 
-  <div class="controls">
-    <button id="prevBtn">◀ Previous</button>
-    <button id="nextBtn">Next ▶</button>
-    <button id="fsBtn">Fullscreen</button>
-    <a class="control-link" href="../Kenowa Hills PBIS Portfolio-2.pdf" download>Download PDF</a>
-  </div>
+<div class="controls">
+<button id="prevBtn">◀ Previous</button>
+<button id="nextBtn">Next ▶</button>
+<button id="fsBtn">Fullscreen</button>
+<a class="control-link" href="../Kenowa Hills PBIS Portfolio-2.pdf" download>Download PDF</a>
+</div>
 </div>
 
 <div class="case-study-wrap">
-  <div class="case-grid">
+<div class="case-grid">
 
-    <div class="case-card">
-      <h2>Services</h2>
-      <ul>
-        <li>Process Improvement</li>
-        <li>Community Engagement</li>
-        <li>Team Leadership</li>
-        <li>Data Analysis</li>
-        <li>Cross Functional Collaboration</li>
-        <li>Digital and Print Design</li>
-      </ul>
-    </div>
+<div class="case-card">
+<h2>Services</h2>
+<ul>
+<li>Process Improvement</li>
+<li>Community Engagement</li>
+<li>Team Leadership</li>
+<li>Data Analysis</li>
+<li>Cross Functional Collaboration</li>
+<li>Digital and Print Design</li>
+</ul>
+</div>
 
-    <div class="case-card">
-      <h2>The Brand</h2>
-      <p>
-        Kenowa Hills Public Schools is a northwest Grand Rapids district serving
-        approximately 2,850 students from preschool through 12th grade, focused
-        on personalized learning and strong community connections.
-      </p>
-    </div>
+<div class="case-card">
+<h2>The Brand</h2>
+<p>
+Kenowa Hills Public Schools is a northwest Grand Rapids district serving 
+approximately 2,850 students from preschool through 12th grade, focused 
+on personalized learning and strong community connections.
+</p>
+</div>
 
-    <div class="case-card">
-      <h2>The Goal</h2>
-      <p>
-        Strengthen PBIS across the middle school and support district alignment
-        through clearer communication, student engagement, and data-informed
-        decision making.
-      </p>
-    </div>
+<div class="case-card">
+<h2>The Goal</h2>
+<p>
+Strengthen PBIS across the middle school and support district alignment 
+through clearer communication, student engagement, and data-informed 
+decision making.
+</p>
+</div>
 
-    <div class="case-card">
-      <h2>The Vibes</h2>
-      <p>
-        Student-centered, supportive, and approachable. Communication focused
-        on clarity, consistency, and meeting middle school students where they are.
-      </p>
-    </div>
+<div class="case-card">
+<h2>The Vibes</h2>
+<p>
+Student-centered, supportive, and approachable. Communication focused 
+on clarity, consistency, and meeting middle school students where they are.
+</p>
+</div>
 
-    <div class="case-card case-card-wide">
-      <h2>Outcome</h2>
-      <ul>
-        <li>Served as PBIS Tier 1 Co-Chair</li>
-        <li>Developed GOLD acronym adopted district-wide</li>
-        <li>Reduced discipline incidents</li>
-        <li>Increased PBIS fidelity</li>
-        <li>Staff participation increased from 30% to 90%</li>
-        <li>Improved communication and consistency</li>
-      </ul>
-    </div>
+<div class="case-card case-card-wide">
+<h2>Outcome</h2>
+<ul>
+<li>Served as PBIS Tier 1 Co-Chair</li>
+<li>Developed GOLD acronym adopted district-wide</li>
+<li>Reduced discipline incidents</li>
+<li>Increased PBIS fidelity</li>
+<li>Staff participation increased from 30% to 90%</li>
+<li>Improved communication and consistency</li>
+</ul>
+</div>
 
-  </div>
+</div>
 </div>
 
 <div class="stage">
-  <div class="flip-shell" id="flipShell">
-    <div class="book-frame">
-      <div class="book-motion" id="bookMotion">
-        <div id="flipbook">
-          <div class="page"><img src="pages/page-01.jpg" alt="Page 1"></div>
-          <div class="page"><img src="pages/page-02.jpg" alt="Page 2"></div>
-          <div class="page"><img src="pages/page-03.jpg" alt="Page 3"></div>
-          <div class="page"><img src="pages/page-04.jpg" alt="Page 4"></div>
-          <div class="page"><img src="pages/page-05.jpg" alt="Page 5"></div>
-          <div class="page"><img src="pages/page-06.jpg" alt="Page 6"></div>
-          <div class="page"><img src="pages/page-07.jpg" alt="Page 7"></div>
-          <div class="page"><img src="pages/page-08.jpg" alt="Page 8"></div>
-          <div class="page"><img src="pages/page-09.jpg" alt="Page 9"></div>
-          <div class="page"><img src="pages/page-10.jpg" alt="Page 10"></div>
-          <div class="page"><img src="pages/page-11.jpg" alt="Page 11"></div>
-          <div class="page"><img src="pages/page-12.jpg" alt="Page 12"></div>
-        </div>
-      </div>
-    </div>
+<div class="flip-shell">
+<div id="flipbook">
 
-    <div class="flip-hint" id="flipHint">Drag corner or use arrows to flip</div>
-  </div>
+<div class="page"><img src="pages/page-01.jpg"></div>
+<div class="page"><img src="pages/page-02.jpg"></div>
+<div class="page"><img src="pages/page-03.jpg"></div>
+<div class="page"><img src="pages/page-04.jpg"></div>
+<div class="page"><img src="pages/page-05.jpg"></div>
+<div class="page"><img src="pages/page-06.jpg"></div>
+<div class="page"><img src="pages/page-07.jpg"></div>
+<div class="page"><img src="pages/page-08.jpg"></div>
+<div class="page"><img src="pages/page-09.jpg"></div>
+<div class="page"><img src="pages/page-10.jpg"></div>
+<div class="page"><img src="pages/page-11.jpg"></div>
+<div class="page"><img src="pages/page-12.jpg"></div>
+
+</div>
+</div>
 </div>
 
 <div class="footer">Drag the page corners or use the buttons to flip</div>
 
 <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
+
 <script>
-const flipbookEl = document.getElementById("flipbook");
-const flipShell = document.getElementById("flipShell");
-const flipHint = document.getElementById("flipHint");
-const bookMotion = document.getElementById("bookMotion");
-const prevBtn = document.getElementById("prevBtn");
-const nextBtn = document.getElementById("nextBtn");
-const fsBtn = document.getElementById("fsBtn");
 
-let userInteracted = false;
-let teaserStarted = false;
-
-const pageFlip = new St.PageFlip(flipbookEl, {
-  width: 600,
-  height: 776,
-  size: "stretch",
-  showCover: true,
-  usePortrait: true,
-  autoSize: true,
-  maxShadowOpacity: 0.45
+const pageFlip = new St.PageFlip(document.getElementById("flipbook"), {
+width:600,
+height:776,
+size:"stretch",
+showCover:true
 });
 
-pageFlip.loadFromHTML(document.querySelectorAll("#flipbook .page"));
+pageFlip.loadFromHTML(document.querySelectorAll(".page"));
 
-function hideHint() {
-  if (flipHint) flipHint.classList.add("hidden");
-}
+document.getElementById("prevBtn").onclick=()=>pageFlip.flipPrev();
+document.getElementById("nextBtn").onclick=()=>pageFlip.flipNext();
 
-function stopTeaser() {
-  if (bookMotion) bookMotion.classList.remove("teasing");
-}
-
-function startTeaser() {
-  if (teaserStarted || userInteracted) return;
-  teaserStarted = true;
-  if (bookMotion) bookMotion.classList.add("teasing");
-}
-
-function markInteracted() {
-  userInteracted = true;
-  hideHint();
-  stopTeaser();
-}
-
-prevBtn.addEventListener("click", () => {
-  markInteracted();
-  pageFlip.flipPrev();
-});
-
-nextBtn.addEventListener("click", () => {
-  markInteracted();
-  pageFlip.flipNext();
-});
-
-fsBtn.addEventListener("click", async () => {
-  markInteracted();
-  try {
-    if (!document.fullscreenElement) {
-      await document.documentElement.requestFullscreen();
-    } else {
-      await document.exitFullscreen();
-    }
-  } catch (err) {
-    console.warn("Fullscreen blocked:", err);
-  }
-});
-
-flipShell.addEventListener("pointerdown", markInteracted);
-flipShell.addEventListener("touchstart", markInteracted, { passive: true });
-
-pageFlip.on("flip", hideHint);
-pageFlip.on("changeState", () => {
-  if (userInteracted) hideHint();
-});
-
-window.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowLeft") {
-    markInteracted();
-    pageFlip.flipPrev();
-  }
-  if (e.key === "ArrowRight") {
-    markInteracted();
-    pageFlip.flipNext();
-  }
-});
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting && entry.intersectionRatio >= 0.45) {
-      startTeaser();
-      observer.disconnect();
-    }
-  });
-}, {
-  threshold: [0.45]
-});
-
-observer.observe(flipShell);
 </script>
 
 </body>
