@@ -188,6 +188,23 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      perspective: 1800px;
+      perspective-origin: center center;
+    }
+
+    /* This wrapper is what rocks */
+    .book-tease-wrap {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-origin: left center;
+      transform-style: preserve-3d;
+      transition: transform .35s ease, filter .35s ease;
+      filter: drop-shadow(0 18px 28px rgba(0,0,0,.22));
+    }
+
+    .book-tease-wrap.teasing {
+      animation: bookRock 2.8s ease-in-out infinite;
     }
 
     #flipbook {
@@ -195,7 +212,6 @@
       height: 100%;
       position: relative;
       z-index: 2;
-      transition: transform .35s ease;
     }
 
     .page img {
@@ -227,17 +243,32 @@
       animation: none;
     }
 
-    @keyframes fadeHint {
-      0%, 100% { opacity: .38; }
-      50% { opacity: .92; }
-    }
-
     .footer {
       text-align: center;
       padding: 20px;
       opacity: .7;
       position: relative;
       z-index: 2;
+    }
+
+    @keyframes fadeHint {
+      0%, 100% { opacity: .38; }
+      50% { opacity: .92; }
+    }
+
+    @keyframes bookRock {
+      0%, 100% {
+        transform: rotateY(0deg) rotateZ(0deg) translateX(0);
+        filter: drop-shadow(0 18px 28px rgba(0,0,0,.22));
+      }
+      35% {
+        transform: rotateY(-11deg) rotateZ(-0.3deg) translateX(2px);
+        filter: drop-shadow(10px 26px 36px rgba(0,0,0,.32));
+      }
+      65% {
+        transform: rotateY(-4deg) rotateZ(-0.1deg) translateX(1px);
+        filter: drop-shadow(4px 20px 30px rgba(0,0,0,.26));
+      }
     }
 
     @media (max-width: 900px) {
@@ -263,6 +294,21 @@
         letter-spacing: .12em;
         white-space: normal;
         width: calc(100% - 32px);
+      }
+
+      @keyframes bookRock {
+        0%, 100% {
+          transform: rotateY(0deg) rotateZ(0deg) translateX(0);
+          filter: drop-shadow(0 14px 22px rgba(0,0,0,.20));
+        }
+        35% {
+          transform: rotateY(-8deg) rotateZ(-0.2deg) translateX(1px);
+          filter: drop-shadow(7px 20px 28px rgba(0,0,0,.28));
+        }
+        65% {
+          transform: rotateY(-3deg) rotateZ(-0.1deg) translateX(1px);
+          filter: drop-shadow(3px 16px 24px rgba(0,0,0,.24));
+        }
       }
     }
   </style>
@@ -344,19 +390,21 @@
   <div class="stage">
     <div class="flip-shell" id="flipShell">
       <div class="book-frame">
-        <div id="flipbook">
-          <div class="page"><img src="pages/page-01.jpg" alt="Page 1"></div>
-          <div class="page"><img src="pages/page-02.jpg" alt="Page 2"></div>
-          <div class="page"><img src="pages/page-03.jpg" alt="Page 3"></div>
-          <div class="page"><img src="pages/page-04.jpg" alt="Page 4"></div>
-          <div class="page"><img src="pages/page-05.jpg" alt="Page 5"></div>
-          <div class="page"><img src="pages/page-06.jpg" alt="Page 6"></div>
-          <div class="page"><img src="pages/page-07.jpg" alt="Page 7"></div>
-          <div class="page"><img src="pages/page-08.jpg" alt="Page 8"></div>
-          <div class="page"><img src="pages/page-09.jpg" alt="Page 9"></div>
-          <div class="page"><img src="pages/page-10.jpg" alt="Page 10"></div>
-          <div class="page"><img src="pages/page-11.jpg" alt="Page 11"></div>
-          <div class="page"><img src="pages/page-12.jpg" alt="Page 12"></div>
+        <div class="book-tease-wrap" id="bookTeaseWrap">
+          <div id="flipbook">
+            <div class="page"><img src="pages/page-01.jpg" alt="Page 1"></div>
+            <div class="page"><img src="pages/page-02.jpg" alt="Page 2"></div>
+            <div class="page"><img src="pages/page-03.jpg" alt="Page 3"></div>
+            <div class="page"><img src="pages/page-04.jpg" alt="Page 4"></div>
+            <div class="page"><img src="pages/page-05.jpg" alt="Page 5"></div>
+            <div class="page"><img src="pages/page-06.jpg" alt="Page 6"></div>
+            <div class="page"><img src="pages/page-07.jpg" alt="Page 7"></div>
+            <div class="page"><img src="pages/page-08.jpg" alt="Page 8"></div>
+            <div class="page"><img src="pages/page-09.jpg" alt="Page 9"></div>
+            <div class="page"><img src="pages/page-10.jpg" alt="Page 10"></div>
+            <div class="page"><img src="pages/page-11.jpg" alt="Page 11"></div>
+            <div class="page"><img src="pages/page-12.jpg" alt="Page 12"></div>
+          </div>
         </div>
       </div>
 
@@ -371,12 +419,13 @@
     const flipbookEl = document.getElementById("flipbook");
     const flipShell = document.getElementById("flipShell");
     const flipHint = document.getElementById("flipHint");
+    const bookTeaseWrap = document.getElementById("bookTeaseWrap");
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
     const fsBtn = document.getElementById("fsBtn");
 
     let userInteracted = false;
-    let introPlayed = false;
+    let teaserStarted = false;
 
     const pageFlip = new St.PageFlip(flipbookEl, {
       width: 600,
@@ -394,26 +443,20 @@
       if (flipHint) flipHint.classList.add("hidden");
     }
 
+    function stopTeaser() {
+      if (bookTeaseWrap) bookTeaseWrap.classList.remove("teasing");
+    }
+
+    function startTeaser() {
+      if (teaserStarted || userInteracted) return;
+      teaserStarted = true;
+      if (bookTeaseWrap) bookTeaseWrap.classList.add("teasing");
+    }
+
     function markInteracted() {
       userInteracted = true;
       hideHint();
-    }
-
-    async function playIntroFlip() {
-      if (introPlayed || userInteracted) return;
-      introPlayed = true;
-
-      try {
-        pageFlip.flipNext();
-
-        setTimeout(() => {
-          if (!userInteracted) {
-            pageFlip.flipPrev();
-          }
-        }, 900);
-      } catch (err) {
-        console.warn("Intro flip skipped:", err);
-      }
+      stopTeaser();
     }
 
     prevBtn.addEventListener("click", () => {
@@ -461,7 +504,7 @@
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting && entry.intersectionRatio >= 0.45) {
-          playIntroFlip();
+          startTeaser();
           observer.disconnect();
         }
       });
