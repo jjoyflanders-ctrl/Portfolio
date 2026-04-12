@@ -167,13 +167,13 @@
 
     .flip-shell {
       width: min(96vw, 1400px);
-      height: min(78vh, 950px);
+      min-height: min(78vh, 950px);
       background: rgba(255,255,255,.04);
       border: 1px solid rgba(255,255,255,.10);
       border-radius: 26px;
       display: grid;
       place-items: center;
-      padding: 18px;
+      padding: 18px 18px 56px;
       position: relative;
       overflow: hidden;
       box-shadow:
@@ -183,9 +183,11 @@
 
     .book-frame {
       position: relative;
-      display: inline-block;
       width: min(92vw, 1280px);
       height: min(72vh, 860px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     #flipbook {
@@ -193,6 +195,7 @@
       height: 100%;
       position: relative;
       z-index: 2;
+      transition: transform .35s ease;
     }
 
     .page img {
@@ -201,79 +204,40 @@
       object-fit: contain;
     }
 
+    .flip-hint {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      opacity: .6;
+      color: rgba(255,255,255,.86);
+      text-align: center;
+      white-space: nowrap;
+      animation: fadeHint 2s ease-in-out infinite;
+      transition: opacity .3s ease, transform .3s ease;
+      pointer-events: none;
+    }
+
+    .flip-hint.hidden {
+      opacity: 0;
+      transform: translateX(-50%) translateY(6px);
+      animation: none;
+    }
+
+    @keyframes fadeHint {
+      0%, 100% { opacity: .38; }
+      50% { opacity: .92; }
+    }
+
     .footer {
       text-align: center;
       padding: 20px;
       opacity: .7;
       position: relative;
       z-index: 2;
-    }
-
-    /* corner curl */
-    .book-corner-hint {
-      position: absolute;
-      right: 10px;
-      bottom: 10px;
-      width: 60px;
-      height: 60px;
-      pointer-events: none;
-      z-index: 100;
-      opacity: .9;
-      transition: opacity .3s ease, transform .3s ease;
-    }
-
-    .book-corner-hint::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      clip-path: polygon(100% 0, 100% 100%, 0 100%);
-      background: linear-gradient(
-        135deg,
-        rgba(255,255,255,0) 0%,
-        rgba(255,255,255,0) 45%,
-        rgba(255,255,255,.22) 65%,
-        rgba(255,255,255,.65) 90%
-      );
-      filter: drop-shadow(-2px -2px 5px rgba(0,0,0,.3));
-      animation: curlTease 1.8s ease-in-out infinite;
-    }
-
-    .book-corner-hint::after {
-      content: "";
-      position: absolute;
-      right: 8px;
-      bottom: 8px;
-      width: 28px;
-      height: 28px;
-      border-right: 1px solid rgba(255,255,255,.34);
-      border-bottom: 1px solid rgba(255,255,255,.24);
-      opacity: .75;
-      animation: curlLine 1.8s ease-in-out infinite;
-    }
-
-    .book-corner-hint.hidden {
-      opacity: 0;
-      transform: translateY(4px);
-    }
-
-    @keyframes curlTease {
-      0%, 100% {
-        transform: rotate(0deg) scale(1);
-      }
-      50% {
-        transform: rotate(-6deg) scale(1.05);
-      }
-    }
-
-    @keyframes curlLine {
-      0%, 100% {
-        opacity: .45;
-        transform: skew(-2deg, -2deg);
-      }
-      50% {
-        opacity: .95;
-        transform: skew(-6deg, -6deg);
-      }
     }
 
     @media (max-width: 900px) {
@@ -288,6 +252,17 @@
       .topbar {
         flex-direction: column;
         align-items: flex-start;
+      }
+
+      .flip-shell {
+        padding-bottom: 64px;
+      }
+
+      .flip-hint {
+        font-size: 11px;
+        letter-spacing: .12em;
+        white-space: normal;
+        width: calc(100% - 32px);
       }
     }
   </style>
@@ -367,8 +342,8 @@
   </div>
 
   <div class="stage">
-    <div class="flip-shell">
-      <div class="book-frame" id="bookFrame">
+    <div class="flip-shell" id="flipShell">
+      <div class="book-frame">
         <div id="flipbook">
           <div class="page"><img src="pages/page-01.jpg" alt="Page 1"></div>
           <div class="page"><img src="pages/page-02.jpg" alt="Page 2"></div>
@@ -383,9 +358,9 @@
           <div class="page"><img src="pages/page-11.jpg" alt="Page 11"></div>
           <div class="page"><img src="pages/page-12.jpg" alt="Page 12"></div>
         </div>
-
-        <div class="book-corner-hint" id="bookCornerHint"></div>
       </div>
+
+      <div class="flip-hint" id="flipHint">Drag corner or use arrows to flip</div>
     </div>
   </div>
 
@@ -394,11 +369,14 @@
   <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
   <script>
     const flipbookEl = document.getElementById("flipbook");
-    const bookFrame = document.getElementById("bookFrame");
-    const cornerHint = document.getElementById("bookCornerHint");
+    const flipShell = document.getElementById("flipShell");
+    const flipHint = document.getElementById("flipHint");
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
     const fsBtn = document.getElementById("fsBtn");
+
+    let userInteracted = false;
+    let introPlayed = false;
 
     const pageFlip = new St.PageFlip(flipbookEl, {
       width: 600,
@@ -413,21 +391,43 @@
     pageFlip.loadFromHTML(document.querySelectorAll("#flipbook .page"));
 
     function hideHint() {
-      if (cornerHint) cornerHint.classList.add("hidden");
+      if (flipHint) flipHint.classList.add("hidden");
+    }
+
+    function markInteracted() {
+      userInteracted = true;
+      hideHint();
+    }
+
+    async function playIntroFlip() {
+      if (introPlayed || userInteracted) return;
+      introPlayed = true;
+
+      try {
+        pageFlip.flipNext();
+
+        setTimeout(() => {
+          if (!userInteracted) {
+            pageFlip.flipPrev();
+          }
+        }, 900);
+      } catch (err) {
+        console.warn("Intro flip skipped:", err);
+      }
     }
 
     prevBtn.addEventListener("click", () => {
-      hideHint();
+      markInteracted();
       pageFlip.flipPrev();
     });
 
     nextBtn.addEventListener("click", () => {
-      hideHint();
+      markInteracted();
       pageFlip.flipNext();
     });
 
     fsBtn.addEventListener("click", async () => {
-      hideHint();
+      markInteracted();
       try {
         if (!document.fullscreenElement) {
           await document.documentElement.requestFullscreen();
@@ -439,22 +439,37 @@
       }
     });
 
-    pageFlip.on("flip", hideHint);
-    pageFlip.on("changeState", hideHint);
+    flipShell.addEventListener("pointerdown", markInteracted);
+    flipShell.addEventListener("touchstart", markInteracted, { passive: true });
 
-    bookFrame.addEventListener("pointerdown", hideHint);
-    bookFrame.addEventListener("touchstart", hideHint, { passive: true });
+    pageFlip.on("flip", hideHint);
+    pageFlip.on("changeState", () => {
+      if (userInteracted) hideHint();
+    });
 
     window.addEventListener("keydown", (e) => {
       if (e.key === "ArrowLeft") {
-        hideHint();
+        markInteracted();
         pageFlip.flipPrev();
       }
       if (e.key === "ArrowRight") {
-        hideHint();
+        markInteracted();
         pageFlip.flipNext();
       }
     });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.45) {
+          playIntroFlip();
+          observer.disconnect();
+        }
+      });
+    }, {
+      threshold: [0.45]
+    });
+
+    observer.observe(flipShell);
   </script>
 
 </body>
