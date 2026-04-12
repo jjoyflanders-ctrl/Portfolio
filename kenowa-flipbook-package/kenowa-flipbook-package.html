@@ -353,6 +353,7 @@ on clarity, consistency, and meeting middle school students where they are.
 <div class="stage">
 <div class="flip-shell">
 <div id="flipbook">
+  <div class="book-corner-hint" id="bookCornerHint"></div>
 
 <div class="page"><img src="pages/page-01.jpg"></div>
 <div class="page"><img src="pages/page-02.jpg"></div>
@@ -376,19 +377,37 @@ on clarity, consistency, and meeting middle school students where they are.
 <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
 
 <script>
+const flipbookEl = document.getElementById("flipbook");
+const cornerHint = document.getElementById("bookCornerHint");
 
-const pageFlip = new St.PageFlip(document.getElementById("flipbook"), {
-width:600,
-height:776,
-size:"stretch",
-showCover:true
+const pageFlip = new St.PageFlip(flipbookEl, {
+  width: 600,
+  height: 776,
+  size: "stretch",
+  showCover: true
 });
 
 pageFlip.loadFromHTML(document.querySelectorAll(".page"));
 
-document.getElementById("prevBtn").onclick=()=>pageFlip.flipPrev();
-document.getElementById("nextBtn").onclick=()=>pageFlip.flipNext();
+document.getElementById("prevBtn").onclick = () => {
+  hideHint();
+  pageFlip.flipPrev();
+};
 
+document.getElementById("nextBtn").onclick = () => {
+  hideHint();
+  pageFlip.flipNext();
+};
+
+flipbookEl.addEventListener("pointerdown", hideHint);
+flipbookEl.addEventListener("touchstart", hideHint, { passive: true });
+
+pageFlip.on("flip", hideHint);
+pageFlip.on("changeState", hideHint);
+
+function hideHint() {
+  if (cornerHint) cornerHint.classList.add("hidden");
+}
 </script>
 
 </body>
