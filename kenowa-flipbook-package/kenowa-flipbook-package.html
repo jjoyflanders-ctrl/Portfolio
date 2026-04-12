@@ -191,6 +191,53 @@ button:hover,
   padding: 20px;
   opacity: .7;
 }
+  @media (max-width: 900px) {
+  .topbar {
+    padding: 14px 16px;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .case-study-wrap {
+    width: min(96vw, 1400px);
+    margin: 28px auto 0;
+    padding: 0 16px;
+  }
+
+  .case-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .case-card-wide {
+    grid-column: span 1;
+  }
+
+  .stage {
+    padding: 26px 16px 36px;
+  }
+
+  .flip-shell {
+    width: 100vw;
+    height: auto;
+    min-height: 74vh;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    padding: 14px;
+  }
+
+  #flipbook {
+    width: min(95vw, 700px);
+    height: min(70vh, 760px);
+  }
+
+  .corner-logo {
+    width: 48px;
+    right: 14px;
+    bottom: 12px;
+    opacity: .50;
+  }
+}
 
 </style>
 </head>
@@ -220,7 +267,7 @@ button:hover,
 <h2>Services</h2>
 <ul>
 <li>Process Improvement</li>
-<li>Workflow Automation / Autocrat
+<li>Workflow Automation / Autocrat</li>
 <li>Community Engagement</li>
 <li>Team Leadership</li>
 <li>Data Analysis</li>
