@@ -183,10 +183,9 @@
 
     .book-frame {
       position: relative;
+      display: inline-block;
       width: min(92vw, 1280px);
       height: min(72vh, 860px);
-      display: grid;
-      place-items: center;
     }
 
     #flipbook {
@@ -210,14 +209,16 @@
       z-index: 2;
     }
 
-    /* real page-curl hint */
+    /* corner curl */
     .book-corner-hint {
       position: absolute;
-      width: 64px;
-      height: 64px;
+      right: 10px;
+      bottom: 10px;
+      width: 60px;
+      height: 60px;
       pointer-events: none;
       z-index: 100;
-      opacity: 1;
+      opacity: .9;
       transition: opacity .3s ease, transform .3s ease;
     }
 
@@ -230,12 +231,10 @@
         135deg,
         rgba(255,255,255,0) 0%,
         rgba(255,255,255,0) 45%,
-        rgba(255,255,255,.18) 62%,
-        rgba(255,255,255,.55) 82%,
-        rgba(255,255,255,.16) 100%
+        rgba(255,255,255,.22) 65%,
+        rgba(255,255,255,.65) 90%
       );
-      filter: drop-shadow(-3px -2px 6px rgba(0,0,0,.28));
-      transform-origin: bottom right;
+      filter: drop-shadow(-2px -2px 5px rgba(0,0,0,.3));
       animation: curlTease 1.8s ease-in-out infinite;
     }
 
@@ -244,10 +243,11 @@
       position: absolute;
       right: 8px;
       bottom: 8px;
-      width: 34px;
-      height: 34px;
+      width: 28px;
+      height: 28px;
       border-right: 1px solid rgba(255,255,255,.34);
-      border-bottom: 1px solid rgba(255,255,255,.22);
+      border-bottom: 1px solid rgba(255,255,255,.24);
+      opacity: .75;
       animation: curlLine 1.8s ease-in-out infinite;
     }
 
@@ -258,10 +258,10 @@
 
     @keyframes curlTease {
       0%, 100% {
-        transform: perspective(500px) rotateX(0deg) rotateY(0deg) scale(1);
+        transform: rotate(0deg) scale(1);
       }
       50% {
-        transform: perspective(500px) rotateX(10deg) rotateY(-18deg) scale(1.06);
+        transform: rotate(-6deg) scale(1.05);
       }
     }
 
@@ -416,27 +416,6 @@
       if (cornerHint) cornerHint.classList.add("hidden");
     }
 
-    function positionHint() {
-      const renderedBook =
-        flipbookEl.querySelector(".stf__block") ||
-        flipbookEl.querySelector(".stf__parent") ||
-        flipbookEl.firstElementChild;
-
-      if (!renderedBook || !cornerHint || !bookFrame) return;
-
-      const bookRect = renderedBook.getBoundingClientRect();
-      const frameRect = bookFrame.getBoundingClientRect();
-
-      const hintWidth = 64;
-      const hintHeight = 64;
-
-      const left = bookRect.right - frameRect.left - hintWidth - 18;
-const top = bookRect.bottom - frameRect.top - hintHeight - 18;
-
-      cornerHint.style.left = left + "px";
-      cornerHint.style.top = top + "px";
-    }
-
     prevBtn.addEventListener("click", () => {
       hideHint();
       pageFlip.flipPrev();
@@ -455,33 +434,27 @@ const top = bookRect.bottom - frameRect.top - hintHeight - 18;
         } else {
           await document.exitFullscreen();
         }
-        setTimeout(positionHint, 300);
       } catch (err) {
         console.warn("Fullscreen blocked:", err);
       }
     });
 
+    pageFlip.on("flip", hideHint);
+    pageFlip.on("changeState", hideHint);
+
     bookFrame.addEventListener("pointerdown", hideHint);
     bookFrame.addEventListener("touchstart", hideHint, { passive: true });
 
-    pageFlip.on("flip", () => {
-      hideHint();
-      setTimeout(positionHint, 60);
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") {
+        hideHint();
+        pageFlip.flipPrev();
+      }
+      if (e.key === "ArrowRight") {
+        hideHint();
+        pageFlip.flipNext();
+      }
     });
-
-    pageFlip.on("changeState", () => {
-      setTimeout(positionHint, 60);
-    });
-
-    window.addEventListener("resize", () => {
-      setTimeout(positionHint, 100);
-    });
-
-    window.addEventListener("load", () => {
-      setTimeout(positionHint, 300);
-    });
-
-    setTimeout(positionHint, 500);
   </script>
 
 </body>
