@@ -181,7 +181,6 @@
         inset 0 0 0 1px rgba(255,255,255,.03);
     }
 
-    /* actual visible book area wrapper */
     .book-frame {
       position: relative;
       width: min(92vw, 1280px);
@@ -211,17 +210,15 @@
       z-index: 2;
     }
 
-    /* BIGGER, more obvious animated corner */
+    /* real page-curl hint */
     .book-corner-hint {
       position: absolute;
-      right: 34px;
-      bottom: 34px;
-      width: 110px;
-      height: 110px;
+      width: 64px;
+      height: 64px;
       pointer-events: none;
-      z-index: 50;
+      z-index: 100;
       opacity: 1;
-      transition: opacity .35s ease, transform .35s ease;
+      transition: opacity .3s ease, transform .3s ease;
     }
 
     .book-corner-hint::before {
@@ -229,56 +226,53 @@
       position: absolute;
       inset: 0;
       clip-path: polygon(100% 0, 100% 100%, 0 100%);
-      background:
-        linear-gradient(
-          135deg,
-          rgba(255,255,255,0) 0%,
-          rgba(255,255,255,0) 38%,
-          rgba(255,255,255,.18) 52%,
-          rgba(255,255,255,.78) 76%,
-          rgba(255,255,255,.20) 100%
-        );
-      filter:
-        drop-shadow(-8px -4px 10px rgba(0,0,0,.28))
-        drop-shadow(0 0 12px rgba(255,255,255,.14));
+      background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0) 45%,
+        rgba(255,255,255,.18) 62%,
+        rgba(255,255,255,.55) 82%,
+        rgba(255,255,255,.16) 100%
+      );
+      filter: drop-shadow(-3px -2px 6px rgba(0,0,0,.28));
       transform-origin: bottom right;
-      animation: curlTease 1.9s ease-in-out infinite;
+      animation: curlTease 1.8s ease-in-out infinite;
     }
 
     .book-corner-hint::after {
-      content: "OPEN";
+      content: "";
       position: absolute;
       right: 8px;
-      bottom: 14px;
-      font-size: 12px;
-      letter-spacing: .24em;
-      font-weight: 700;
-      color: rgba(255,255,255,.82);
-      text-shadow: 0 0 10px rgba(255,255,255,.18);
-      transform: rotate(-45deg);
-      animation: openPulse 1.9s ease-in-out infinite;
+      bottom: 8px;
+      width: 34px;
+      height: 34px;
+      border-right: 1px solid rgba(255,255,255,.34);
+      border-bottom: 1px solid rgba(255,255,255,.22);
+      animation: curlLine 1.8s ease-in-out infinite;
     }
 
     .book-corner-hint.hidden {
       opacity: 0;
-      transform: translateY(8px) scale(.96);
+      transform: translateY(4px);
     }
 
     @keyframes curlTease {
       0%, 100% {
-        transform: perspective(700px) rotateX(0deg) rotateY(0deg) scale(1);
+        transform: perspective(500px) rotateX(0deg) rotateY(0deg) scale(1);
       }
       50% {
-        transform: perspective(700px) rotateX(14deg) rotateY(-26deg) scale(1.12);
+        transform: perspective(500px) rotateX(10deg) rotateY(-18deg) scale(1.06);
       }
     }
 
-    @keyframes openPulse {
+    @keyframes curlLine {
       0%, 100% {
-        opacity: .65;
+        opacity: .45;
+        transform: skew(-2deg, -2deg);
       }
       50% {
-        opacity: 1;
+        opacity: .95;
+        transform: skew(-6deg, -6deg);
       }
     }
 
@@ -294,17 +288,6 @@
       .topbar {
         flex-direction: column;
         align-items: flex-start;
-      }
-
-      .book-corner-hint {
-        width: 88px;
-        height: 88px;
-        right: 18px;
-        bottom: 18px;
-      }
-
-      .book-corner-hint::after {
-        font-size: 10px;
       }
     }
   </style>
@@ -329,6 +312,7 @@
 
   <div class="case-study-wrap">
     <div class="case-grid">
+
       <div class="case-card">
         <h2>Services</h2>
         <ul>
@@ -378,11 +362,12 @@
           <li>Improved communication and consistency</li>
         </ul>
       </div>
+
     </div>
   </div>
 
   <div class="stage">
-    <div class="flip-shell" id="flipShell">
+    <div class="flip-shell">
       <div class="book-frame" id="bookFrame">
         <div id="flipbook">
           <div class="page"><img src="pages/page-01.jpg" alt="Page 1"></div>
@@ -431,6 +416,27 @@
       if (cornerHint) cornerHint.classList.add("hidden");
     }
 
+    function positionHint() {
+      const renderedBook =
+        flipbookEl.querySelector(".stf__block") ||
+        flipbookEl.querySelector(".stf__parent") ||
+        flipbookEl.firstElementChild;
+
+      if (!renderedBook || !cornerHint || !bookFrame) return;
+
+      const bookRect = renderedBook.getBoundingClientRect();
+      const frameRect = bookFrame.getBoundingClientRect();
+
+      const hintWidth = 64;
+      const hintHeight = 64;
+
+      const left = bookRect.right - frameRect.left - hintWidth + 6;
+      const top = bookRect.bottom - frameRect.top - hintHeight + 6;
+
+      cornerHint.style.left = left + "px";
+      cornerHint.style.top = top + "px";
+    }
+
     prevBtn.addEventListener("click", () => {
       hideHint();
       pageFlip.flipPrev();
@@ -441,37 +447,42 @@
       pageFlip.flipNext();
     });
 
-    if (fsBtn) {
-      fsBtn.addEventListener("click", async () => {
-        hideHint();
-        try {
-          if (!document.fullscreenElement) {
-            await document.documentElement.requestFullscreen();
-          } else {
-            await document.exitFullscreen();
-          }
-        } catch (err) {
-          console.warn("Fullscreen blocked:", err);
+    fsBtn.addEventListener("click", async () => {
+      hideHint();
+      try {
+        if (!document.fullscreenElement) {
+          await document.documentElement.requestFullscreen();
+        } else {
+          await document.exitFullscreen();
         }
-      });
-    }
+        setTimeout(positionHint, 300);
+      } catch (err) {
+        console.warn("Fullscreen blocked:", err);
+      }
+    });
 
     bookFrame.addEventListener("pointerdown", hideHint);
     bookFrame.addEventListener("touchstart", hideHint, { passive: true });
 
-    pageFlip.on("flip", hideHint);
-    pageFlip.on("changeState", hideHint);
-
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft") {
-        hideHint();
-        pageFlip.flipPrev();
-      }
-      if (e.key === "ArrowRight") {
-        hideHint();
-        pageFlip.flipNext();
-      }
+    pageFlip.on("flip", () => {
+      hideHint();
+      setTimeout(positionHint, 60);
     });
+
+    pageFlip.on("changeState", () => {
+      setTimeout(positionHint, 60);
+    });
+
+    window.addEventListener("resize", () => {
+      setTimeout(positionHint, 100);
+    });
+
+    window.addEventListener("load", () => {
+      setTimeout(positionHint, 300);
+    });
+
+    setTimeout(positionHint, 500);
   </script>
+
 </body>
 </html>
