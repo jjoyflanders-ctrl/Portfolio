@@ -117,6 +117,61 @@ button:hover,
   box-shadow: 0 0 16px rgba(255,255,255,.06);
 }
 
+/* Case study area */
+.case-study-wrap {
+  position: relative;
+  z-index: 5;
+  width: min(96vw, 1400px);
+  margin: 28px auto 0;
+  padding: 0 16px;
+}
+
+.case-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.case-card {
+  background: rgba(255,255,255,.045);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 22px;
+  padding: 24px 24px 22px;
+  box-shadow:
+    0 18px 40px rgba(0,0,0,.28),
+    0 0 22px rgba(255,255,255,.03);
+  backdrop-filter: blur(4px);
+}
+
+.case-card h2 {
+  margin: 0 0 12px;
+  font-size: 12px;
+  letter-spacing: .20em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.62);
+  font-weight: 700;
+}
+
+.case-card p,
+.case-card li {
+  color: rgba(255,255,255,.90);
+  line-height: 1.65;
+  font-size: 15px;
+}
+
+.case-card ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.case-card li + li {
+  margin-top: 6px;
+}
+
+.case-card-wide {
+  grid-column: span 2;
+}
+
 /* Stage */
 .stage {
   position: relative;
@@ -210,6 +265,14 @@ button:hover,
     align-items: flex-start;
   }
 
+  .case-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .case-card-wide {
+    grid-column: span 1;
+  }
+
   .flip-shell {
     width: 100vw;
     height: auto;
@@ -235,11 +298,13 @@ button:hover,
 </style>
 </head>
 <body>
+
 <img src="Copy of J Squared.svg" class="corner-logo" alt="">
+
 <div class="topbar">
   <div class="title-wrap">
     <h1>J² Designs | Highlight Industries Portfolio</h1>
-    <p>UX-Driven Process & Communication System Modernization,Technical Documentation Improvement, E-Commerce Optimization, Design. </p>
+    <p>UX-Driven Process & Communication System Modernization, Technical Documentation Improvement, E-Commerce Optimization, Design.</p>
   </div>
   <div class="controls">
     <button id="prevBtn">◀ Previous</button>
@@ -248,6 +313,64 @@ button:hover,
     <a class="control-link" href="../Highlight Industries Portfolio-2.pdf" download>Download PDF</a>
   </div>
 </div>
+
+<div class="case-study-wrap">
+  <div class="case-grid">
+
+    <div class="case-card">
+      <h2>Services</h2>
+      <ul>
+        <li>UX Design</li>
+        <li>Digital Business Cards</li>
+        <li>Customer Data Cleanup</li>
+        <li>Technical Documentation Design</li>
+        <li>E-Commerce Management</li>
+        <li>Process Improvement</li>
+      </ul>
+    </div>
+
+    <div class="case-card">
+      <h2>The Brand</h2>
+      <p>
+        Highlight Industries is a manufacturer of stretch wrap equipment and quality control systems.
+        Growth in technology and specialization has helped the company stay ahead of competitors.
+        Highlight offers one of the largest selections of stretch wrap equipment in the world, with
+        distributors worldwide and a strong focus on quality, value, and technology.
+      </p>
+    </div>
+
+    <div class="case-card">
+      <h2>The Goal</h2>
+      <p>
+        Improve internal processes while elevating both digital and print communication.
+        The focus was on making information easier to access, improving consistency across materials,
+        and strengthening Highlight’s digital presence.
+      </p>
+    </div>
+
+    <div class="case-card">
+      <h2>The Vibes</h2>
+      <p>
+        Clean, practical, and technical, while still modern and approachable.
+        The work focused on clarity, usability, and consistency across digital and print materials.
+      </p>
+    </div>
+
+    <div class="case-card case-card-wide">
+      <h2>Outcome</h2>
+      <ul>
+        <li>Made contact sharing easier with personalized digital business cards</li>
+        <li>Improved consistency through updated and automated email signatures</li>
+        <li>Introduced Quick Start Guides and QR codes to make manuals easier for customers to access</li>
+        <li>Saved internal time and reduced reliance on printed documentation</li>
+        <li>Improved Shopify organization and product clarity</li>
+        <li>Helped reduce shipment-related issues through better product data accuracy</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
 <div class="stage">
   <div class="flip-shell">
     <div id="flipbook">
@@ -270,7 +393,9 @@ button:hover,
     </div>
   </div>
 </div>
+
 <div class="footer">Drag the page corners or use the buttons to flip</div>
+
 <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
 <script>
 const pageFlip = new St.PageFlip(document.getElementById("flipbook"), {
@@ -291,9 +416,12 @@ const pageFlip = new St.PageFlip(document.getElementById("flipbook"), {
   drawShadow: true,
   clickEventForward: true
 });
+
 pageFlip.loadFromHTML(document.querySelectorAll(".page"));
+
 document.getElementById("prevBtn").addEventListener("click", () => pageFlip.flipPrev());
 document.getElementById("nextBtn").addEventListener("click", () => pageFlip.flipNext());
+
 document.getElementById("fsBtn").addEventListener("click", async () => {
   const el = document.documentElement;
   if (!document.fullscreenElement) {
