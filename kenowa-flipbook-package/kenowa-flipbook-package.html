@@ -4,8 +4,11 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>J² Designs | Kenowa Hills PBIS Flipbook</title>
+
 <style>
+
 * { box-sizing: border-box; }
+
 body {
   margin: 0;
   background: radial-gradient(circle at top, rgba(55,55,55,.95) 0%, rgba(17,17,17,.98) 42%, rgba(5,5,5,1) 100%);
@@ -17,6 +20,7 @@ body {
   position: relative;
   overflow-x: hidden;
 }
+
 body::before {
   content: "";
   position: fixed;
@@ -27,6 +31,7 @@ body::before {
   pointer-events: none;
   z-index: 0;
 }
+
 body::after {
   content: "";
   position: fixed;
@@ -35,6 +40,7 @@ body::after {
   pointer-events: none;
   z-index: 0;
 }
+
 .corner-logo {
   position: fixed;
   right: 28px;
@@ -45,6 +51,7 @@ body::after {
   pointer-events: none;
   z-index: 1;
 }
+
 .topbar {
   position: sticky;
   top: 0;
@@ -58,6 +65,7 @@ body::after {
   backdrop-filter: blur(8px);
   border-bottom: 1px solid rgba(255,255,255,.10);
 }
+
 .title-wrap h1 {
   margin: 0;
   font-size: 28px;
@@ -66,17 +74,20 @@ body::after {
   color: #00bf63;
   text-shadow: 0 0 8px rgba(0,191,99,.22);
 }
+
 .title-wrap p {
   margin: 4px 0 0;
   color: rgba(255,255,255,.72);
   font-size: 14px;
 }
+
 .controls {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   align-items: center;
 }
+
 button,
 .control-link {
   background: rgba(25,25,25,.96);
@@ -86,12 +97,10 @@ button,
   padding: 10px 16px;
   font-size: 14px;
   cursor: pointer;
-  transition: transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+  transition: all .2s ease;
   text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
+
 button:hover,
 .control-link:hover {
   transform: translateY(-1px);
@@ -99,155 +108,207 @@ button:hover,
   border-color: rgba(255,255,255,.28);
   box-shadow: 0 0 16px rgba(255,255,255,.06);
 }
-.stage {
+
+/* Case Study */
+
+.case-study-wrap {
+  width: min(96vw, 1400px);
+  margin: 30px auto;
+}
+
+.case-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.case-card {
+  background: rgba(255,255,255,.045);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 22px;
+  padding: 24px;
+}
+
+.case-card h2 {
+  margin: 0 0 14px;
+  font-size: 12px;
+  letter-spacing: .20em;
+  text-transform: uppercase;
+  color: #00bf63;
+  font-weight: 700;
   position: relative;
+  padding-bottom: 8px;
+  text-shadow: 0 0 6px rgba(0,191,99,.25);
+}
+
+.case-card h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 32px;
+  height: 2px;
+  background: #00bf63;
+  opacity: .65;
+  box-shadow: 0 0 8px rgba(0,191,99,.35);
+}
+
+.case-card-wide {
+  grid-column: span 2;
+}
+
+.stage {
   flex: 1;
   display: grid;
   place-items: center;
-  padding: 26px 16px 36px;
-  z-index: 5;
+  padding: 26px;
 }
+
 .flip-shell {
-  position: relative;
-  z-index: 5;
   width: min(96vw, 1400px);
   height: min(78vh, 950px);
   background: rgba(255,255,255,.04);
   border: 1px solid rgba(255,255,255,.10);
   border-radius: 26px;
-  box-shadow:
-    0 30px 80px rgba(0,0,0,.52),
-    0 0 40px rgba(255,255,255,.06);
   display: grid;
   place-items: center;
   padding: 18px;
 }
-.flip-shell::before {
-  content: "";
-  position: absolute;
-  inset: 6% 10%;
-  background: radial-gradient(circle, rgba(255,255,255,.08) 0%, rgba(255,255,255,.03) 28%, rgba(255,255,255,0) 68%);
-  filter: blur(22px);
-  z-index: 0;
-  pointer-events: none;
-}
+
 #flipbook {
   width: min(92vw, 1280px);
   height: min(72vh, 860px);
-  position: relative;
-  z-index: 2;
 }
-.page { background: #fff; }
+
 .page img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  display: block;
-  user-select: none;
-  pointer-events: none;
 }
+
 .footer {
-  display: flex;
-  justify-content: center;
+  text-align: center;
   padding: 20px;
-  opacity: .72;
-  z-index: 5;
-  position: relative;
-  font-size: 14px;
-  color: rgba(255,255,255,.78);
+  opacity: .7;
 }
-@media (max-width: 900px) {
-  .topbar {
-    padding: 14px 16px;
-    align-items: flex-start;
-    flex-direction: column;
-  }
-  .flip-shell {
-    width: 100vw;
-    height: auto;
-    min-height: 74vh;
-    border-radius: 0;
-    border-left: 0;
-    border-right: 0;
-    padding: 14px;
-  }
-  #flipbook {
-    width: min(95vw, 700px);
-    height: min(70vh, 760px);
-  }
-  .corner-logo {
-    width: 48px;
-    right: 14px;
-    bottom: 12px;
-    opacity: .50;
-  }
-}
+
 </style>
 </head>
+
 <body>
-<img src="Copy of J Squared.svg" class="corner-logo" alt="">
+
+<img src="Copy of J Squared.svg" class="corner-logo">
+
 <div class="topbar">
-  <div class="title-wrap">
-    <h1>J² Designs | Kenowa Hills PBIS</h1>
-    <p>Community Outreach, Data-Driven Program Development, System Improvement, Strategic Communication, Social Media, Email Campaigns.</p>
-  </div>
-  <div class="controls">
-    <button id="prevBtn">◀ Previous</button>
-    <button id="nextBtn">Next ▶</button>
-    <button id="fsBtn">Fullscreen</button>
-    <a class="control-link" href="../Kenowa Hills PBIS Portfolio-2.pdf" download>Download PDF</a>
-  </div>
+<div class="title-wrap">
+<h1>J² Designs | Kenowa Hills PBIS</h1>
+<p>Community Outreach, Data-Driven Program Development, System Improvement</p>
 </div>
+
+<div class="controls">
+<button id="prevBtn">◀ Previous</button>
+<button id="nextBtn">Next ▶</button>
+<button id="fsBtn">Fullscreen</button>
+<a class="control-link" href="../Kenowa Hills PBIS Portfolio-2.pdf" download>Download PDF</a>
+</div>
+</div>
+
+<div class="case-study-wrap">
+<div class="case-grid">
+
+<div class="case-card">
+<h2>Services</h2>
+<ul>
+<li>Process Improvement</li>
+<li>Community Engagement</li>
+<li>Team Leadership</li>
+<li>Data Analysis</li>
+<li>Cross Functional Collaboration</li>
+<li>Digital and Print Design</li>
+</ul>
+</div>
+
+<div class="case-card">
+<h2>The Brand</h2>
+<p>
+Kenowa Hills Public Schools is a northwest Grand Rapids district serving 
+approximately 2,850 students from preschool through 12th grade, focused 
+on personalized learning and strong community connections.
+</p>
+</div>
+
+<div class="case-card">
+<h2>The Goal</h2>
+<p>
+Strengthen PBIS across the middle school and support district alignment 
+through clearer communication, student engagement, and data-informed 
+decision making.
+</p>
+</div>
+
+<div class="case-card">
+<h2>The Vibes</h2>
+<p>
+Student-centered, supportive, and approachable. Communication focused 
+on clarity, consistency, and meeting middle school students where they are.
+</p>
+</div>
+
+<div class="case-card case-card-wide">
+<h2>Outcome</h2>
+<ul>
+<li>Served as PBIS Tier 1 Co-Chair</li>
+<li>Developed GOLD acronym adopted district-wide</li>
+<li>Reduced discipline incidents</li>
+<li>Increased PBIS fidelity</li>
+<li>Staff participation increased from 30% to 90%</li>
+<li>Improved communication and consistency</li>
+</ul>
+</div>
+
+</div>
+</div>
+
 <div class="stage">
-  <div class="flip-shell">
-    <div id="flipbook">
-      <div class="page" data-density="hard"><img src="pages/page-01.jpg" alt="J² Designs | Kenowa Hills PBIS page 1"></div>
-      <div class="page"><img src="pages/page-02.jpg" alt="J² Designs | Kenowa Hills PBIS page 2"></div>
-      <div class="page"><img src="pages/page-03.jpg" alt="J² Designs | Kenowa Hills PBIS page 3"></div>
-      <div class="page"><img src="pages/page-04.jpg" alt="J² Designs | Kenowa Hills PBIS page 4"></div>
-      <div class="page"><img src="pages/page-05.jpg" alt="J² Designs | Kenowa Hills PBIS page 5"></div>
-      <div class="page"><img src="pages/page-06.jpg" alt="J² Designs | Kenowa Hills PBIS page 6"></div>
-      <div class="page"><img src="pages/page-07.jpg" alt="J² Designs | Kenowa Hills PBIS page 7"></div>
-      <div class="page"><img src="pages/page-08.jpg" alt="J² Designs | Kenowa Hills PBIS page 8"></div>
-      <div class="page"><img src="pages/page-09.jpg" alt="J² Designs | Kenowa Hills PBIS page 9"></div>
-      <div class="page"><img src="pages/page-10.jpg" alt="J² Designs | Kenowa Hills PBIS page 10"></div>
-      <div class="page"><img src="pages/page-11.jpg" alt="J² Designs | Kenowa Hills PBIS page 11"></div>
-      <div class="page" data-density="hard"><img src="pages/page-12.jpg" alt="J² Designs | Kenowa Hills PBIS page 12"></div>
-    </div>
-  </div>
+<div class="flip-shell">
+<div id="flipbook">
+
+<div class="page"><img src="pages/page-01.jpg"></div>
+<div class="page"><img src="pages/page-02.jpg"></div>
+<div class="page"><img src="pages/page-03.jpg"></div>
+<div class="page"><img src="pages/page-04.jpg"></div>
+<div class="page"><img src="pages/page-05.jpg"></div>
+<div class="page"><img src="pages/page-06.jpg"></div>
+<div class="page"><img src="pages/page-07.jpg"></div>
+<div class="page"><img src="pages/page-08.jpg"></div>
+<div class="page"><img src="pages/page-09.jpg"></div>
+<div class="page"><img src="pages/page-10.jpg"></div>
+<div class="page"><img src="pages/page-11.jpg"></div>
+<div class="page"><img src="pages/page-12.jpg"></div>
+
 </div>
+</div>
+</div>
+
 <div class="footer">Drag the page corners or use the buttons to flip</div>
+
 <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
+
 <script>
+
 const pageFlip = new St.PageFlip(document.getElementById("flipbook"), {
-  width: 600,
-  height: 776,
-  size: "stretch",
-  minWidth: 280,
-  maxWidth: 1200,
-  minHeight: 360,
-  maxHeight: 1552,
-  maxShadowOpacity: 0.45,
-  showCover: true,
-  mobileScrollSupport: false,
-  usePortrait: true,
-  autoSize: true,
-  startZIndex: 10,
-  flippingTime: 900,
-  drawShadow: true,
-  clickEventForward: true
+width:600,
+height:776,
+size:"stretch",
+showCover:true
 });
+
 pageFlip.loadFromHTML(document.querySelectorAll(".page"));
-document.getElementById("prevBtn").addEventListener("click", () => pageFlip.flipPrev());
-document.getElementById("nextBtn").addEventListener("click", () => pageFlip.flipNext());
-document.getElementById("fsBtn").addEventListener("click", async () => {
-  const el = document.documentElement;
-  if (!document.fullscreenElement) {
-    await el.requestFullscreen?.();
-  } else {
-    await document.exitFullscreen?.();
-  }
-});
+
+document.getElementById("prevBtn").onclick=()=>pageFlip.flipPrev();
+document.getElementById("nextBtn").onclick=()=>pageFlip.flipNext();
+
 </script>
+
 </body>
 </html>
