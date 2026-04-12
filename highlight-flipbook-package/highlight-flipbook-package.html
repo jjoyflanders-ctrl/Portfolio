@@ -144,12 +144,27 @@ button:hover,
 }
 
 .case-card h2 {
-  margin: 0 0 12px;
+  margin: 0 0 14px;
   font-size: 12px;
   letter-spacing: .20em;
   text-transform: uppercase;
-  color: rgba(255,255,255,.62);
+  color: #00bf63;
   font-weight: 700;
+  position: relative;
+  padding-bottom: 8px;
+  text-shadow: 0 0 6px rgba(0,191,99,.25);
+}
+
+.case-card h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 32px;
+  height: 2px;
+  background: #00bf63;
+  opacity: .65;
+  box-shadow: 0 0 8px rgba(0,191,99,.35);
 }
 
 .case-card p,
