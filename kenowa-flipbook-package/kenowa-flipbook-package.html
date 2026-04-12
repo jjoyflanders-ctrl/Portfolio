@@ -1,1001 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>J² Designs | Kenowa Hills PBIS Flipbook</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flipbook</title>
 
-  <style>
-    * { box-sizing: border-box; }
+<style>
 
-    body {
-      margin: 0;
-      background: radial-gradient(circle at top, rgba(55,55,55,.95) 0%, rgba(17,17,17,.98) 42%, rgba(5,5,5,1) 100%);
-      color: white;
-      font-family: Arial, Helvetica, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow-x: hidden;
-    }
+body{
+margin:0;
+background:#0b0b0b;
+font-family:Arial, Helvetica, sans-serif;
+color:white;
+}
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-image: url("https://www.transparenttextures.com/patterns/brick-wall.png");
-      background-repeat: repeat;
-      opacity: .30;
-      pointer-events: none;
-      z-index: 0;
-    }
+.stage{
+padding:100px 20px;
+display:flex;
+justify-content:center;
+}
 
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at 50% 18%, rgba(255,255,255,.06) 0%, rgba(255,255,255,.02) 22%, rgba(255,255,255,0) 52%);
-      pointer-events: none;
-      z-index: 0;
-    }
+.flip-shell{
+width:min(96vw,1200px);
+background:rgba(255,255,255,.04);
+border-radius:20px;
+padding:40px;
+position:relative;
+box-shadow:0 20px 60px rgba(0,0,0,.4);
+}
 
-    .corner-logo {
-      position: fixed;
-      right: 28px;
-      bottom: 22px;
-      width: 115px;
-      opacity: .60;
-      filter: drop-shadow(0 0 12px rgba(255,255,255,.10));
-      pointer-events: none;
-      z-index: 1;
-    }
+.book-frame{
+width:100%;
+height:700px;
+position:relative;
+perspective:1800px;
+display:flex;
+justify-content:center;
+align-items:center;
+}
 
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 18px;
-      padding: 16px 24px;
-      background: rgba(0,0,0,.70);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(255,255,255,.10);
-    }
+/* flipbook */
+#flipbook{
+width:100%;
+height:100%;
+position:relative;
+z-index:2;
+}
 
-    .title-wrap h1 {
-      margin: 0;
-      font-size: 28px;
-      letter-spacing: .04em;
-      font-weight: 600;
-      color: #00bf63;
-      text-shadow: 0 0 8px rgba(0,191,99,.22);
-    }
+.page img{
+width:100%;
+height:100%;
+object-fit:contain;
+}
 
-    .title-wrap p {
-      margin: 4px 0 0;
-      color: rgba(255,255,255,.72);
-      font-size: 14px;
-    }
+/* fake cover animation */
+.book-cover-tease{
+position:absolute;
+inset:0;
+z-index:10;
+pointer-events:none;
+transform-origin:left center;
+opacity:0;
+}
 
-    .controls {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
+.book-cover-tease img{
+width:100%;
+height:100%;
+object-fit:contain;
+filter:drop-shadow(0 18px 28px rgba(0,0,0,.3));
+}
 
-    button,
-    .control-link {
-      background: rgba(25,25,25,.96);
-      color: white;
-      border: 1px solid rgba(255,255,255,.16);
-      border-radius: 999px;
-      padding: 10px 16px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all .2s ease;
-      text-decoration: none;
-    }
+.book-cover-tease.teasing{
+opacity:1;
+animation:coverOpen 2.8s ease-in-out infinite;
+}
 
-    button:hover,
-    .control-link:hover {
-      transform: translateY(-1px);
-      background: rgba(35,35,35,.98);
-      border-color: rgba(255,255,255,.28);
-      box-shadow: 0 0 16px rgba(255,255,255,.06);
-    }
+@keyframes coverOpen{
+0%,100%{
+transform:perspective(1800px) rotateY(0deg);
+}
 
-    .case-study-wrap {
-      width: min(96vw, 1400px);
-      margin: 30px auto;
-      position: relative;
-      z-index: 2;
-    }
+35%{
+transform:perspective(1800px) rotateY(-22deg);
+}
 
-    .case-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 22px;
-    }
+60%{
+transform:perspective(1800px) rotateY(-10deg);
+}
+}
 
-    .case-card {
-      background: rgba(255,255,255,.045);
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 22px;
-      padding: 24px;
-    }
+/* hint text */
 
-    .case-card h2 {
-      margin: 0 0 14px;
-      font-size: 12px;
-      letter-spacing: .20em;
-      text-transform: uppercase;
-      color: #00bf63;
-      font-weight: 700;
-      position: relative;
-      padding-bottom: 8px;
-      text-shadow: 0 0 6px rgba(0,191,99,.25);
-    }
+.flip-hint{
+position:absolute;
+bottom:10px;
+left:50%;
+transform:translateX(-50%);
+font-size:12px;
+letter-spacing:.15em;
+text-transform:uppercase;
+opacity:.6;
+animation:fadeHint 2s infinite;
+}
 
-    .case-card h2::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 32px;
-      height: 2px;
-      background: #00bf63;
-      opacity: .65;
-      box-shadow: 0 0 8px rgba(0,191,99,.35);
-    }
+.flip-hint.hidden{
+opacity:0;
+}
 
-    .case-card-wide {
-      grid-column: span 2;
-    }
+@keyframes fadeHint{
+0%,100%{opacity:.3}
+50%{opacity:.9}
+}
 
-    .stage {
-      flex: 1;
-      display: grid;
-      place-items: center;
-      padding: 26px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .flip-shell {
-      width: min(96vw, 1400px);
-      min-height: min(78vh, 950px);
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 26px;
-      display: grid;
-      place-items: center;
-      padding: 18px 18px 56px;
-      position: relative;
-      overflow: hidden;
-      box-shadow:
-        0 18px 50px rgba(0,0,0,.35),
-        inset 0 0 0 1px rgba(255,255,255,.03);
-    }
-
-    .book-frame {
-      position: relative;
-      width: min(92vw, 1280px);
-      height: min(72vh, 860px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      perspective: 1800px;
-      perspective-origin: center center;
-    }
-
-    /* This wrapper is what rocks */
-    .book-tease-wrap {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transform-origin: left center;
-      transform-style: preserve-3d;
-      transition: transform .35s ease, filter .35s ease;
-      filter: drop-shadow(0 18px 28px rgba(0,0,0,.22));
-    }
-
-    .book-tease-wrap.teasing {
-      animation: bookRock 2.8s ease-in-out infinite;
-    }
-
-    #flipbook {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      z-index: 2;
-    }
-
-    .page img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    .flip-hint {
-      position: absolute;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 12px;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      opacity: .6;
-      color: rgba(255,255,255,.86);
-      text-align: center;
-      white-space: nowrap;
-      animation: fadeHint 2s ease-in-out infinite;
-      transition: opacity .3s ease, transform .3s ease;
-      pointer-events: none;
-    }
-
-    .flip-hint.hidden {
-      opacity: 0;
-      transform: translateX(-50%) translateY(6px);
-      animation: none;
-    }
-
-    .footer {
-      text-align: center;
-      padding: 20px;
-      opacity: .7;
-      position: relative;
-      z-index: 2;
-    }
-
-    @keyframes fadeHint {
-      0%, 100% { opacity: .38; }
-      50% { opacity: .92; }
-    }
-
-    @keyframes bookRock {
-      0%, 100% {
-        transform: rotateY(0deg) rotateZ(0deg) translateX(0);
-        filter: drop-shadow(0 18px 28px rgba(0,0,0,.22));
-      }
-      35% {
-        transform: rotateY(-11deg) rotateZ(-0.3deg) translateX(2px);
-        filter: drop-shadow(10px 26px 36px rgba(0,0,0,.32));
-      }
-      65% {
-        transform: rotateY(-4deg) rotateZ(-0.1deg) translateX(1px);
-        filter: drop-shadow(4px 20px 30px rgba(0,0,0,.26));
-      }
-    }
-
-    @media (max-width: 900px) {
-      .case-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .case-card-wide {
-        grid-column: span 1;
-      }
-
-      .topbar {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .flip-shell {
-        padding-bottom: 64px;
-      }
-
-      .flip-hint {
-        font-size: 11px;
-        letter-spacing: .12em;
-        white-space: normal;
-        width: calc(100% - 32px);
-      }
-
-      @keyframes bookRock {
-        0%, 100% {
-          transform: rotateY(0deg) rotateZ(0deg) translateX(0);
-          filter: drop-shadow(0 14px 22px rgba(0,0,0,.20));
-        }
-        35% {
-          transform: rotateY(-8deg) rotateZ(-0.2deg) translateX(1px);
-          filter: drop-shadow(7px 20px 28px rgba(0,0,0,.28));
-        }
-        65% {
-          transform: rotateY(-3deg) rotateZ(-0.1deg) translateX(1px);
-          filter: drop-shadow(3px 16px 24px rgba(0,0,0,.24));
-        }
-      }
-    }
-  </style>
+</style>
 </head>
+
 <body>
 
-  <img src="Copy of J Squared.svg" class="corner-logo" alt="J Squared logo">
+<div style="height:800px"></div>
 
-  <div class="topbar">
-    <div class="title-wrap">
-      <h1>J² Designs | Kenowa Hills PBIS</h1>
-      <p>Community Outreach, Data-Driven Program Development, System Improvement</p>
-    </div>
+<div class="stage">
 
-    <div class="controls">
-      <button id="prevBtn">◀ Previous</button>
-      <button id="nextBtn">Next ▶</button>
-      <button id="fsBtn">Fullscreen</button>
-      <a class="control-link" href="../Kenowa Hills PBIS Portfolio-2.pdf" download>Download PDF</a>
-    </div>
-  </div>
+<div class="flip-shell" id="flipShell">
 
-  <div class="case-study-wrap">
-    <div class="case-grid">
+<div class="book-frame">
 
-      <div class="case-card">
-        <h2>Services</h2>
-        <ul>
-          <li>Process Improvement</li>
-          <li>Community Engagement</li>
-          <li>Team Leadership</li>
-          <li>Data Analysis</li>
-          <li>Cross Functional Collaboration</li>
-          <li>Digital and Print Design</li>
-        </ul>
-      </div>
+<div class="book-cover-tease" id="bookCover">
+<img src="pages/page-01.jpg">
+</div>
 
-      <div class="case-card">
-        <h2>The Brand</h2>
-        <p>
-          Kenowa Hills Public Schools is a northwest Grand Rapids district serving
-          approximately 2,850 students from preschool through 12th grade, focused
-          on personalized learning and strong community connections.
-        </p>
-      </div>
+<div id="flipbook">
 
-      <div class="case-card">
-        <h2>The Goal</h2>
-        <p>
-          Strengthen PBIS across the middle school and support district alignment
-          through clearer communication, student engagement, and data-informed
-          decision making.
-        </p>
-      </div>
+<div class="page"><img src="pages/page-01.jpg"></div>
+<div class="page"><img src="pages/page-02.jpg"></div>
+<div class="page"><img src="pages/page-03.jpg"></div>
+<div class="page"><img src="pages/page-04.jpg"></div>
+<div class="page"><img src="pages/page-05.jpg"></div>
+<div class="page"><img src="pages/page-06.jpg"></div>
+<div class="page"><img src="pages/page-07.jpg"></div>
+<div class="page"><img src="pages/page-08.jpg"></div>
 
-      <div class="case-card">
-        <h2>The Vibes</h2>
-        <p>
-          Student-centered, supportive, and approachable. Communication focused
-          on clarity, consistency, and meeting middle school students where they are.
-        </p>
-      </div>
+</div>
 
-      <div class="case-card case-card-wide">
-        <h2>Outcome</h2>
-        <ul>
-          <li>Served as PBIS Tier 1 Co-Chair</li>
-          <li>Developed GOLD acronym adopted district-wide</li>
-          <li>Reduced discipline incidents</li>
-          <li>Increased PBIS fidelity</li>
-          <li>Staff participation increased from 30% to 90%</li>
-          <li>Improved communication and consistency</li>
-        </ul>
-      </div>
+</div>
 
-    </div>
-  </div>
+<div class="flip-hint" id="flipHint">
+Drag corner or use arrows to flip
+</div>
 
-  <div class="stage">
-    <div class="flip-shell" id="flipShell">
-      <div class="book-frame">
-        <div class="book-tease-wrap" id="bookTeaseWrap">
-          <div id="flipbook">
-            <div class="page"><img src="pages/page-01.jpg" alt="Page 1"></div>
-            <div class="page"><img src="pages/page-02.jpg" alt="Page 2"></div>
-            <div class="page"><img src="pages/page-03.jpg" alt="Page 3"></div>
-            <div class="page"><img src="pages/page-04.jpg" alt="Page 4"></div>
-            <div class="page"><img src="pages/page-05.jpg" alt="Page 5"></div>
-            <div class="page"><img src="pages/page-06.jpg" alt="Page 6"></div>
-            <div class="page"><img src="pages/page-07.jpg" alt="Page 7"></div>
-            <div class="page"><img src="pages/page-08.jpg" alt="Page 8"></div>
-            <div class="page"><img src="pages/page-09.jpg" alt="Page 9"></div>
-            <div class="page"><img src="pages/page-10.jpg" alt="Page 10"></div>
-            <div class="page"><img src="pages/page-11.jpg" alt="Page 11"></div>
-            <div class="page"><img src="pages/page-12.jpg" alt="Page 12"></div>
-          </div>
-        </div>
-      </div>
+</div>
 
-      <div class="flip-hint" id="flipHint">Drag corner or use arrows to flip</div>
-    </div>
-  </div>
+</div>
 
-  <div class="footer">Drag the page corners or use the buttons to flip</div>
+<script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
-  <script>
-    const flipbookEl = document.getElementById("flipbook");
-    const flipShell = document.getElementById("flipShell");
-    const flipHint = document.getElementById("flipHint");
-    const bookTeaseWrap = document.getElementById("bookTeaseWrap");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-    const fsBtn = document.getElementById("fsBtn");
+<script>
 
-    let userInteracted = false;
-    let teaserStarted = false;
+const flipbook=document.getElementById("flipbook");
+const flipShell=document.getElementById("flipShell");
+const cover=document.getElementById("bookCover");
+const hint=document.getElementById("flipHint");
 
-    const pageFlip = new St.PageFlip(flipbookEl, {
-      width: 600,
-      height: 776,
-      size: "stretch",
-      showCover: true,
-      usePortrait: true,
-      autoSize: true,
-      maxShadowOpacity: 0.45
-    });
+let started=false;
+let interacted=false;
 
-    pageFlip.loadFromHTML(document.querySelectorAll("#flipbook .page"));
+const pageFlip=new St.PageFlip(flipbook,{
+width:600,
+height:776,
+size:"stretch",
+showCover:true,
+autoSize:true
+});
 
-    function hideHint() {
-      if (flipHint) flipHint.classList.add("hidden");
-    }
+pageFlip.loadFromHTML(document.querySelectorAll(".page"));
 
-    function stopTeaser() {
-      if (bookTeaseWrap) bookTeaseWrap.classList.remove("teasing");
-    }
+function startTease(){
+if(started||interacted)return;
+started=true;
+cover.classList.add("teasing");
+}
 
-    function startTeaser() {
-      if (teaserStarted || userInteracted) return;
-      teaserStarted = true;
-      if (bookTeaseWrap) bookTeaseWrap.classList.add("teasing");
-    }
+function stopTease(){
+interacted=true;
+cover.classList.remove("teasing");
+hint.classList.add("hidden");
+}
 
-    function markInteracted() {
-      userInteracted = true;
-      hideHint();
-      stopTeaser();
-    }
+flipShell.addEventListener("pointerdown",stopTease);
+pageFlip.on("flip",stopTease);
 
-    prevBtn.addEventListener("click", () => {
-      markInteracted();
-      pageFlip.flipPrev();
-    });
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+startTease();
+observer.disconnect();
+}
+});
+},{threshold:.4});
 
-    nextBtn.addEventListener("click", () => {
-      markInteracted();
-      pageFlip.flipNext();
-    });
+observer.observe(flipShell);
 
-    fsBtn.addEventListener("click", async () => {
-      markInteracted();
-      try {
-        if (!document.fullscreenElement) {
-          await document.documentElement.requestFullscreen();
-        } else {
-          await document.exitFullscreen();
-        }
-      } catch (err) {
-        console.warn("Fullscreen blocked:", err);
-      }
-    });
-
-    flipShell.addEventListener("pointerdown", markInteracted);
-    flipShell.addEventListener("touchstart", markInteracted, { passive: true });
-
-    pageFlip.on("flip", hideHint);
-    pageFlip.on("changeState", () => {
-      if (userInteracted) hideHint();
-    });
-
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft") {
-        markInteracted();
-        pageFlip.flipPrev();
-      }
-      if (e.key === "ArrowRight") {
-        markInteracted();
-        pageFlip.flipNext();
-      }
-    });
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.45) {
-          startTeaser();
-          observer.disconnect();
-        }
-      });
-    }, {
-      threshold: [0.45]
-    });
-
-    observer.observe(flipShell);
-  </script>
-
-</body>
-</html>      inset: 0;
-      background: radial-gradient(circle at 50% 18%, rgba(255,255,255,.06) 0%, rgba(255,255,255,.02) 22%, rgba(255,255,255,0) 52%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .corner-logo {
-      position: fixed;
-      right: 28px;
-      bottom: 22px;
-      width: 115px;
-      opacity: .60;
-      filter: drop-shadow(0 0 12px rgba(255,255,255,.10));
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 18px;
-      padding: 16px 24px;
-      background: rgba(0,0,0,.70);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(255,255,255,.10);
-    }
-
-    .title-wrap h1 {
-      margin: 0;
-      font-size: 28px;
-      letter-spacing: .04em;
-      font-weight: 600;
-      color: #00bf63;
-      text-shadow: 0 0 8px rgba(0,191,99,.22);
-    }
-
-    .title-wrap p {
-      margin: 4px 0 0;
-      color: rgba(255,255,255,.72);
-      font-size: 14px;
-    }
-
-    .controls {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    button,
-    .control-link {
-      background: rgba(25,25,25,.96);
-      color: white;
-      border: 1px solid rgba(255,255,255,.16);
-      border-radius: 999px;
-      padding: 10px 16px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all .2s ease;
-      text-decoration: none;
-    }
-
-    button:hover,
-    .control-link:hover {
-      transform: translateY(-1px);
-      background: rgba(35,35,35,.98);
-      border-color: rgba(255,255,255,.28);
-      box-shadow: 0 0 16px rgba(255,255,255,.06);
-    }
-
-    .case-study-wrap {
-      width: min(96vw, 1400px);
-      margin: 30px auto;
-      position: relative;
-      z-index: 2;
-    }
-
-    .case-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 22px;
-    }
-
-    .case-card {
-      background: rgba(255,255,255,.045);
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 22px;
-      padding: 24px;
-    }
-
-    .case-card h2 {
-      margin: 0 0 14px;
-      font-size: 12px;
-      letter-spacing: .20em;
-      text-transform: uppercase;
-      color: #00bf63;
-      font-weight: 700;
-      position: relative;
-      padding-bottom: 8px;
-      text-shadow: 0 0 6px rgba(0,191,99,.25);
-    }
-
-    .case-card h2::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 32px;
-      height: 2px;
-      background: #00bf63;
-      opacity: .65;
-      box-shadow: 0 0 8px rgba(0,191,99,.35);
-    }
-
-    .case-card-wide {
-      grid-column: span 2;
-    }
-
-    .stage {
-      flex: 1;
-      display: grid;
-      place-items: center;
-      padding: 26px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .flip-shell {
-      width: min(96vw, 1400px);
-      min-height: min(78vh, 950px);
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 26px;
-      display: grid;
-      place-items: center;
-      padding: 18px 18px 56px;
-      position: relative;
-      overflow: hidden;
-      box-shadow:
-        0 18px 50px rgba(0,0,0,.35),
-        inset 0 0 0 1px rgba(255,255,255,.03);
-    }
-
-    .book-frame {
-      position: relative;
-      width: min(92vw, 1280px);
-      height: min(72vh, 860px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      perspective: 1800px;
-      perspective-origin: center center;
-    }
-
-    /* This wrapper is what rocks */
-    .book-tease-wrap {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transform-origin: left center;
-      transform-style: preserve-3d;
-      transition: transform .35s ease, filter .35s ease;
-      filter: drop-shadow(0 18px 28px rgba(0,0,0,.22));
-    }
-
-    .book-tease-wrap.teasing {
-      animation: bookRock 2.8s ease-in-out infinite;
-    }
-
-    #flipbook {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      z-index: 2;
-    }
-
-    .page img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    .flip-hint {
-      position: absolute;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 12px;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      opacity: .6;
-      color: rgba(255,255,255,.86);
-      text-align: center;
-      white-space: nowrap;
-      animation: fadeHint 2s ease-in-out infinite;
-      transition: opacity .3s ease, transform .3s ease;
-      pointer-events: none;
-    }
-
-    .flip-hint.hidden {
-      opacity: 0;
-      transform: translateX(-50%) translateY(6px);
-      animation: none;
-    }
-
-    .footer {
-      text-align: center;
-      padding: 20px;
-      opacity: .7;
-      position: relative;
-      z-index: 2;
-    }
-
-    @keyframes fadeHint {
-      0%, 100% { opacity: .38; }
-      50% { opacity: .92; }
-    }
-
-    @keyframes bookRock {
-      0%, 100% {
-        transform: rotateY(0deg) rotateZ(0deg) translateX(0);
-        filter: drop-shadow(0 18px 28px rgba(0,0,0,.22));
-      }
-      35% {
-        transform: rotateY(-11deg) rotateZ(-0.3deg) translateX(2px);
-        filter: drop-shadow(10px 26px 36px rgba(0,0,0,.32));
-      }
-      65% {
-        transform: rotateY(-4deg) rotateZ(-0.1deg) translateX(1px);
-        filter: drop-shadow(4px 20px 30px rgba(0,0,0,.26));
-      }
-    }
-
-    @media (max-width: 900px) {
-      .case-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .case-card-wide {
-        grid-column: span 1;
-      }
-
-      .topbar {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .flip-shell {
-        padding-bottom: 64px;
-      }
-
-      .flip-hint {
-        font-size: 11px;
-        letter-spacing: .12em;
-        white-space: normal;
-        width: calc(100% - 32px);
-      }
-
-      @keyframes bookRock {
-        0%, 100% {
-          transform: rotateY(0deg) rotateZ(0deg) translateX(0);
-          filter: drop-shadow(0 14px 22px rgba(0,0,0,.20));
-        }
-        35% {
-          transform: rotateY(-8deg) rotateZ(-0.2deg) translateX(1px);
-          filter: drop-shadow(7px 20px 28px rgba(0,0,0,.28));
-        }
-        65% {
-          transform: rotateY(-3deg) rotateZ(-0.1deg) translateX(1px);
-          filter: drop-shadow(3px 16px 24px rgba(0,0,0,.24));
-        }
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <img src="Copy of J Squared.svg" class="corner-logo" alt="J Squared logo">
-
-  <div class="topbar">
-    <div class="title-wrap">
-      <h1>J² Designs | Kenowa Hills PBIS</h1>
-      <p>Community Outreach, Data-Driven Program Development, System Improvement</p>
-    </div>
-
-    <div class="controls">
-      <button id="prevBtn">◀ Previous</button>
-      <button id="nextBtn">Next ▶</button>
-      <button id="fsBtn">Fullscreen</button>
-      <a class="control-link" href="../Kenowa Hills PBIS Portfolio-2.pdf" download>Download PDF</a>
-    </div>
-  </div>
-
-  <div class="case-study-wrap">
-    <div class="case-grid">
-
-      <div class="case-card">
-        <h2>Services</h2>
-        <ul>
-          <li>Process Improvement</li>
-          <li>Community Engagement</li>
-          <li>Team Leadership</li>
-          <li>Data Analysis</li>
-          <li>Cross Functional Collaboration</li>
-          <li>Digital and Print Design</li>
-        </ul>
-      </div>
-
-      <div class="case-card">
-        <h2>The Brand</h2>
-        <p>
-          Kenowa Hills Public Schools is a northwest Grand Rapids district serving
-          approximately 2,850 students from preschool through 12th grade, focused
-          on personalized learning and strong community connections.
-        </p>
-      </div>
-
-      <div class="case-card">
-        <h2>The Goal</h2>
-        <p>
-          Strengthen PBIS across the middle school and support district alignment
-          through clearer communication, student engagement, and data-informed
-          decision making.
-        </p>
-      </div>
-
-      <div class="case-card">
-        <h2>The Vibes</h2>
-        <p>
-          Student-centered, supportive, and approachable. Communication focused
-          on clarity, consistency, and meeting middle school students where they are.
-        </p>
-      </div>
-
-      <div class="case-card case-card-wide">
-        <h2>Outcome</h2>
-        <ul>
-          <li>Served as PBIS Tier 1 Co-Chair</li>
-          <li>Developed GOLD acronym adopted district-wide</li>
-          <li>Reduced discipline incidents</li>
-          <li>Increased PBIS fidelity</li>
-          <li>Staff participation increased from 30% to 90%</li>
-          <li>Improved communication and consistency</li>
-        </ul>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="stage">
-    <div class="flip-shell" id="flipShell">
-      <div class="book-frame">
-        <div class="book-tease-wrap" id="bookTeaseWrap">
-          <div id="flipbook">
-            <div class="page"><img src="pages/page-01.jpg" alt="Page 1"></div>
-            <div class="page"><img src="pages/page-02.jpg" alt="Page 2"></div>
-            <div class="page"><img src="pages/page-03.jpg" alt="Page 3"></div>
-            <div class="page"><img src="pages/page-04.jpg" alt="Page 4"></div>
-            <div class="page"><img src="pages/page-05.jpg" alt="Page 5"></div>
-            <div class="page"><img src="pages/page-06.jpg" alt="Page 6"></div>
-            <div class="page"><img src="pages/page-07.jpg" alt="Page 7"></div>
-            <div class="page"><img src="pages/page-08.jpg" alt="Page 8"></div>
-            <div class="page"><img src="pages/page-09.jpg" alt="Page 9"></div>
-            <div class="page"><img src="pages/page-10.jpg" alt="Page 10"></div>
-            <div class="page"><img src="pages/page-11.jpg" alt="Page 11"></div>
-            <div class="page"><img src="pages/page-12.jpg" alt="Page 12"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flip-hint" id="flipHint">Drag corner or use arrows to flip</div>
-    </div>
-  </div>
-
-  <div class="footer">Drag the page corners or use the buttons to flip</div>
-
-  <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
-  <script>
-    const flipbookEl = document.getElementById("flipbook");
-    const flipShell = document.getElementById("flipShell");
-    const flipHint = document.getElementById("flipHint");
-    const bookTeaseWrap = document.getElementById("bookTeaseWrap");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-    const fsBtn = document.getElementById("fsBtn");
-
-    let userInteracted = false;
-    let teaserStarted = false;
-
-    const pageFlip = new St.PageFlip(flipbookEl, {
-      width: 600,
-      height: 776,
-      size: "stretch",
-      showCover: true,
-      usePortrait: true,
-      autoSize: true,
-      maxShadowOpacity: 0.45
-    });
-
-    pageFlip.loadFromHTML(document.querySelectorAll("#flipbook .page"));
-
-    function hideHint() {
-      if (flipHint) flipHint.classList.add("hidden");
-    }
-
-    function stopTeaser() {
-      if (bookTeaseWrap) bookTeaseWrap.classList.remove("teasing");
-    }
-
-    function startTeaser() {
-      if (teaserStarted || userInteracted) return;
-      teaserStarted = true;
-      if (bookTeaseWrap) bookTeaseWrap.classList.add("teasing");
-    }
-
-    function markInteracted() {
-      userInteracted = true;
-      hideHint();
-      stopTeaser();
-    }
-
-    prevBtn.addEventListener("click", () => {
-      markInteracted();
-      pageFlip.flipPrev();
-    });
-
-    nextBtn.addEventListener("click", () => {
-      markInteracted();
-      pageFlip.flipNext();
-    });
-
-    fsBtn.addEventListener("click", async () => {
-      markInteracted();
-      try {
-        if (!document.fullscreenElement) {
-          await document.documentElement.requestFullscreen();
-        } else {
-          await document.exitFullscreen();
-        }
-      } catch (err) {
-        console.warn("Fullscreen blocked:", err);
-      }
-    });
-
-    flipShell.addEventListener("pointerdown", markInteracted);
-    flipShell.addEventListener("touchstart", markInteracted, { passive: true });
-
-    pageFlip.on("flip", hideHint);
-    pageFlip.on("changeState", () => {
-      if (userInteracted) hideHint();
-    });
-
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft") {
-        markInteracted();
-        pageFlip.flipPrev();
-      }
-      if (e.key === "ArrowRight") {
-        markInteracted();
-        pageFlip.flipNext();
-      }
-    });
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.45) {
-          startTeaser();
-          observer.disconnect();
-        }
-      });
-    }, {
-      threshold: [0.45]
-    });
-
-    observer.observe(flipShell);
-  </script>
+</script>
 
 </body>
 </html>
